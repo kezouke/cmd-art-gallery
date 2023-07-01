@@ -7,6 +7,8 @@ public class Picture {
     private final String name;
     private final String link;
 
+    private final String border = "__________________________________\n";
+
     public Picture(Integer ID, Author author, Integer year, String name, String link) {
         this.ID = ID;
         this.author = author;
@@ -16,11 +18,20 @@ public class Picture {
     }
 
     public String shortInfo() {
-        return "Picture#" + ID + "Name: " + name + "\n" + "Author: " + author;
+        return border +
+                "Picture Short Info: \n" +
+                border + "\t" +
+                "Name: " + name + "\n\t" +
+                "Author: " + author.fullName + "\n\t" +
+                "Unique Number: " + ID + "\n" +
+                border;
     }
 
     public String detailedInfo() {
-        return shortInfo() + "\n" + "Date of creation:" + year + "\n" + "Link: " + link;
+        return shortInfo().replace("Short", "Detailed") + "\t" +
+                "Date of creation:" + year + "\n\t" +
+                "Link: " + link + "\n" +
+                border;
     }
 }
 
