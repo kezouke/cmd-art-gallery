@@ -36,6 +36,8 @@ public class MainPicturesWindow implements Window {
                 running = false;
             } else if (pictures.containsKey(input)) {
                 new DetailedPictureWindow(pictures.get(input), scanner).execute();
+            } else {
+                System.out.println("No such command was found!");
             }
         }
     }

@@ -13,19 +13,19 @@ public class ApplicationStart {
         int authorID = 0;
 
         Author author1 = new Author(
-                authorID++,
+                ++authorID,
                 "Ivan Borisovich",
                 "1900/1981",
                 "My bio..............................");
         Picture pic1 = new Picture(
-                pictureID++,
+                ++pictureID,
                 author1,
                 1980,
                 "the war",
                 "linkxscdcsdcsd");
         pictureMap.put("picture" + pic1.ID, pic1);
         Picture pic2 = new Picture(
-                pictureID++,
+                ++pictureID,
                 author1,
                 1991,
                 "crash",
