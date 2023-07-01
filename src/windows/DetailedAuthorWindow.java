@@ -15,12 +15,19 @@ public class DetailedAuthorWindow implements Window {
 
     @Override
     public void execute() {
-        System.out.println(author.detailedInfo());
         boolean running = true;
         while (running) {
+            System.out.println(author.detailedInfo());
+            System.out.println("""
+                    If you want to return back:
+                    \tenter 'close'.
+                    """);
+
             String input = scanner.next();
             if (input.equals("back")) {
-                return;
+                running = false;
+            } else {
+                System.out.println("No such command was found!");
             }
         }
     }
