@@ -22,7 +22,7 @@ public class DetailedPictureWindow implements Window {
                     If you want to see detailed info about picture's author
                     \tenter 'author'
                     If you want to return back:
-                    \tenter 'close'.
+                    \tenter 'back'.
                     """);
 
             String input = scanner.next();

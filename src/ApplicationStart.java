@@ -16,7 +16,13 @@ public class ApplicationStart {
                 ++authorID,
                 "Ivan Borisovich",
                 "1900/1981",
-                "My bio..............................");
+                "I was born in Innopolis.");
+        Author author2 = new Author(
+                ++authorID,
+                "Yu Ching",
+                "3001/3002",
+                "I love Pan-Galactic Gargle Blaster"
+        );
         Picture pic1 = new Picture(
                 ++pictureID,
                 author1,
@@ -26,7 +32,7 @@ public class ApplicationStart {
         pictureMap.put("picture" + pic1.ID, pic1);
         Picture pic2 = new Picture(
                 ++pictureID,
-                author1,
+                author2,
                 1991,
                 "crash",
                 "xxx.www.3"

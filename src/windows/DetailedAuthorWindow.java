@@ -20,7 +20,7 @@ public class DetailedAuthorWindow implements Window {
             System.out.println(author.detailedInfo());
             System.out.println("""
                     If you want to return back:
-                    \tenter 'close'.
+                    \tenter 'back'.
                     """);
 
             String input = scanner.next();
