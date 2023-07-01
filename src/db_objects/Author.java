@@ -25,7 +25,7 @@ public class Author {
     }
 
     public String detailedInfo() {
-        return shortInfo() + "\n\t"
+        return shortInfo().replace("Short", "Detailed") + "\n\t"
                 + "Dates: " + livingDate + "\n\t"
                 + "Biography: " + biography + "\n" +
                 border;
