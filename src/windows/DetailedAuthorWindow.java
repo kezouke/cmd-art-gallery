@@ -16,18 +16,24 @@ public class DetailedAuthorWindow implements Window {
     @Override
     public void execute() {
         boolean running = true;
+        boolean wrongCommandWasEntered = false;
         while (running) {
             System.out.println(author.detailedInfo());
             System.out.println("""
                     If you want to return back:
                     \tenter 'back'.
                     """);
+            if (wrongCommandWasEntered) {
+                System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                System.out.println("No such command was found!");
+                wrongCommandWasEntered = false;
+            }
 
             String input = scanner.next();
             if (input.equals("back")) {
                 running = false;
             } else {
-                System.out.println("No such command was found!");
+                wrongCommandWasEntered = true;
             }
         }
     }

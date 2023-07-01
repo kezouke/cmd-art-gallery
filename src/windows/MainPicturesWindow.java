@@ -17,6 +17,7 @@ public class MainPicturesWindow implements Window {
     @Override
     public void execute() {
         boolean running = true;
+        boolean wrongCommandWasEntered = false;
         while (running) {
 
             for (Picture picture : pictures.values()) {
@@ -24,12 +25,17 @@ public class MainPicturesWindow implements Window {
             }
             System.out.println(
                     """
-                    If you want to see detailed info about picture
-                    \tenter a text with following format: picture#
-                    \twhere # is Unique Number of picture
-                    If you want to close application:
-                    \tenter 'stop'.
-                    """);
+                            If you want to see detailed info about picture
+                            \tenter a text with following format: picture#
+                            \twhere # is Unique Number of picture
+                            If you want to close application:
+                            \tenter 'stop'.
+                            """);
+            if (wrongCommandWasEntered) {
+                System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                System.out.println("No such command was found!");
+                wrongCommandWasEntered = false;
+            }
 
             String input = scanner.next();
             if (input.equals("stop")) {
@@ -37,7 +43,7 @@ public class MainPicturesWindow implements Window {
             } else if (pictures.containsKey(input)) {
                 new DetailedPictureWindow(pictures.get(input), scanner).execute();
             } else {
-                System.out.println("No such command was found!");
+                wrongCommandWasEntered = true;
             }
         }
     }
