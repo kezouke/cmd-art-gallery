@@ -2,7 +2,7 @@ package db_objects;
 
 public class Author {
     public final Integer ID;
-    private final String fullName;
+    public final String fullName;
     private final String livingDate;
     private final String biography;
     private final String border = "__________________________________\n";
@@ -20,14 +20,14 @@ public class Author {
         return border +
                 "Author Short Info: " + "\n" +
                 border + "\t" +
-                "Name: " + fullName +
+                "Name: " + fullName + "\n" +
                 border;
     }
 
     public String detailedInfo() {
         return shortInfo() + "\n\t"
                 + "Dates: " + livingDate + "\n\t"
-                + "Biography: " + "\n\t" + biography +
+                + "Biography: " + biography + "\n" +
                 border;
     }
 
