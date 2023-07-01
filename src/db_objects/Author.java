@@ -11,7 +11,7 @@ public class Author {
     public Author(Integer ID, String fullName, String livingDate, String biography) {
         this.ID = ID;
         this.fullName = fullName;
-        this.livingDate = livingDate
+        this.livingDate = livingDate;
         this.biography = biography;
     }
 
