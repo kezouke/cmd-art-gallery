@@ -15,7 +15,7 @@ public class ApplicationStart {
         Author author1 = new Author(
                 authorID++,
                 "Ivan Borisovich",
-                1967,
+                "1900/1981",
                 "My bio..............................");
         Picture pic1 = new Picture(
                 pictureID++,

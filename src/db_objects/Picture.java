@@ -28,9 +28,9 @@ public class Picture {
     }
 
     public String detailedInfo() {
-        return shortInfo().replace("Short", "Detailed") + "\n\t" +
+        return shortInfo().replace("Short", "Detailed") + "\t" +
                 "Date of creation:" + year + "\n\t" +
-                "Link: " + link +
+                "Link: " + link + "\n" +
                 border;
     }
 }
