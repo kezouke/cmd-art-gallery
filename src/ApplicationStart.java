@@ -37,6 +37,13 @@ public class ApplicationStart {
                 "crash",
                 "xxx.www.3"
         );
+        Picture pic3 = new Picture(
+                ++pictureID,
+                author2,
+                1991,
+                "wow",
+                "xxx.www.32"
+        );
         pictureMap.put("picture" + pic2.ID, pic2);
         new MainPicturesWindow(pictureMap, new Scanner(System.in)).execute();
     }
