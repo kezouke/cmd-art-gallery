@@ -11,7 +11,11 @@ public class Picture {
 
     private final String border = "__________________________________\n";
 
-    public Picture(Integer id, Author author, Timestamp year, String name, String link) {
+    public Picture(Integer id,
+                   Author author,
+                   Timestamp year,
+                   String name,
+                   String link) {
         this.id = id;
         this.author = author;
         this.year = year;

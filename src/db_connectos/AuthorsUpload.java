@@ -44,7 +44,8 @@ public class AuthorsUpload {
             QuerySnapshot querySnapshot = query.get();
 
             for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-                Map<String, Object> author = (Map<String, Object>) document.getData().get("author");
+                Map<String, Object> author =
+                        (Map<String, Object>) document.getData().get("author");
                 authorsMap.put(
                         document.getId(),
                         new Author(
