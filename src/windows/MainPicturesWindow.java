@@ -1,9 +1,11 @@
 package windows;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Scanner;
 
 import db_objects.Picture;
+import representation_instruments.OutputMessage;
 
 public class MainPicturesWindow implements Window {
     private final Map<String, Picture> pictures;
@@ -23,17 +25,17 @@ public class MainPicturesWindow implements Window {
             for (Picture picture : pictures.values()) {
                 System.out.println(picture.shortInfo());
             }
-            System.out.println(
-                    """
-                            If you want to see detailed info about picture
-                            \tenter a text with following format: picture#
-                            \twhere # is Unique Number of picture
-                            If you want to close application:
-                            \tenter 'stop'.
-                            """);
+            try {
+                new OutputMessage("files/OutputForPicture").display();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             if (wrongCommandWasEntered) {
-                System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                System.out.println("No such command was found!");
+                try {
+                    new OutputMessage("files/OutputForError").display();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 wrongCommandWasEntered = false;
             }
 
