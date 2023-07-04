@@ -9,8 +9,6 @@ public class Picture {
     private final String name;
     private final String link;
 
-    private final String border = "__________________________________\n";
-
     public Picture(Integer id,
                    Author author,
                    Timestamp year,
@@ -24,20 +22,21 @@ public class Picture {
     }
 
     public String shortInfo() {
+        String border = "__________________________________\n";
         return border +
                 "Picture Short Info: \n" +
                 border + "\t" +
-                "Name: " + name + "\n\t" +
-                author.shortInfo() + "\n\t" +
+                "Name: " + name + "\n" +
+                border + "\t" +
                 "Unique Number: " + id + "\n" +
                 border;
     }
 
     public String detailedInfo() {
-        return shortInfo().replace("Short", "Detailed") + "\t" +
-                "Date of creation:" + year + "\n\t" +
+        return shortInfo().replace("Picture Short", "Picture Detailed") + "\t" +
+                "Date of creation:" + year.toDate() + "\n\t" +
                 "Link: " + link + "\n" +
-                border;
+                author.shortInfo();
     }
 }
 

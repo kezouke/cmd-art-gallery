@@ -1,6 +1,7 @@
 package db_objects;
 
 import com.google.cloud.Timestamp;
+import representation_instruments.FormatTextInWindow;
 
 public class Author {
     public final Integer id;
@@ -32,13 +33,17 @@ public class Author {
                 "Author Short Info: " + "\n" +
                 border + "\t" +
                 "Name: " + firstName + " " + lastName + "\n" +
+                border + "\t" +
+                gender + "\n" +
                 border;
     }
 
     public String detailedInfo() {
         return shortInfo().replace("Short", "Detailed") + "\n\t"
                 + "Dates: " + dateOfBirth.toDate() + "\n\t"
-                + "Biography: " + biography + "\n" +
+                + "Biography: " +
+                new FormatTextInWindow().format(biography, 20)
+                + "\n" +
                 border;
     }
 
