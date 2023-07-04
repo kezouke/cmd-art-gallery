@@ -1,4 +1,4 @@
-package db_connectos;
+package db_connectors;
 
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -14,16 +14,16 @@ import db_objects.Picture;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class PicturesUpload {
-    private final List<Picture> pictures;
+    private final Map<String, Picture> pictures;
 
     public PicturesUpload() {
-        pictures = new ArrayList<>();
+        pictures = new HashMap<>();
+        lazyLoad();
     }
 
     private void lazyLoad() {
@@ -48,7 +48,8 @@ public class PicturesUpload {
             for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                 Map<String, Object> picture =
                         (Map<String, Object>) document.getData().get("picture");
-                pictures.add(
+                pictures.put(
+                        "picture" + picture.get("id").toString(),
                         new Picture(
                                 ((Long) picture.get("id")).intValue(),
                                 authors.receiveAuthor(
@@ -64,7 +65,7 @@ public class PicturesUpload {
         }
     }
 
-    public List<Picture> receivePicture() {
+    public Map<String, Picture> receivePicture() {
         return pictures;
     }
 }

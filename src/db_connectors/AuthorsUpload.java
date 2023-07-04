@@ -1,4 +1,4 @@
-package db_connectos;
+package db_connectors;
 
 import java.io.FileInputStream;
 import java.io.IOException;
