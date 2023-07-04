@@ -13,7 +13,12 @@ public class Author {
     private final String border = "__________________________________\n";
 
 
-    public Author(Integer id, String firstName, String lastName, String gender, Timestamp dateOfBirth, String biography) {
+    public Author(Integer id,
+                  String firstName,
+                  String lastName,
+                  String gender,
+                  Timestamp dateOfBirth,
+                  String biography) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
