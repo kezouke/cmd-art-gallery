@@ -1,3 +1,5 @@
+package main;
+
 import db_objects.Author;
 import db_objects.Picture;
 import windows.MainPicturesWindow;
