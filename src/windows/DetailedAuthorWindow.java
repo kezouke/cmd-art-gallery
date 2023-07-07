@@ -1,7 +1,9 @@
 package windows;
 
 import db_objects.Author;
+import representation_instruments.OutputMessage;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class DetailedAuthorWindow implements Window {
@@ -19,13 +21,17 @@ public class DetailedAuthorWindow implements Window {
         boolean wrongCommandWasEntered = false;
         while (running) {
             System.out.println(author.detailedInfo());
-            System.out.println("""
-                    If you want to return back:
-                    \tenter 'back'.
-                    """);
+            try {
+                new OutputMessage("files/OutputForBackAfterAuthor").display();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             if (wrongCommandWasEntered) {
-                System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                System.out.println("No such command was found!");
+                try {
+                    new OutputMessage("files/OutputForError").display();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 wrongCommandWasEntered = false;
             }
 

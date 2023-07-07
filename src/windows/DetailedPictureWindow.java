@@ -1,7 +1,9 @@
 package windows;
 
 import db_objects.Picture;
+import representation_instruments.OutputMessage;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class DetailedPictureWindow implements Window {
@@ -18,12 +20,11 @@ public class DetailedPictureWindow implements Window {
         boolean running = true;
         while (running) {
             System.out.println(picture.detailedInfo());
-            System.out.println("""
-                    If you want to see detailed info about picture's author
-                    \tenter 'author'
-                    If you want to return back:
-                    \tenter 'back'.
-                    """);
+            try {
+                new OutputMessage("files/OutputForAuthor").display();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
             String input = scanner.next();
             if (input.equals("back")) {
@@ -31,7 +32,11 @@ public class DetailedPictureWindow implements Window {
             } else if (input.equals("author")) {
                 new DetailedAuthorWindow(picture.author, scanner).execute();
             } else {
-                System.out.println("No such command was found!");
+                try {
+                    new OutputMessage("files/OutputForError").display();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
