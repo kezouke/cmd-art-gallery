@@ -11,10 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-public class PicturesUpload {
+public class PicturesConnect {
     private final Map<String, Picture> pictures;
 
-    public PicturesUpload(Firestore db) {
+    public PicturesConnect(Firestore db) {
         pictures = new HashMap<>();
         lazyLoad(db);
     }
@@ -25,7 +25,7 @@ public class PicturesUpload {
             ApiFuture<QuerySnapshot> query = collection.get();
             QuerySnapshot querySnapshot = query.get();
 
-            AuthorsUpload authors = new AuthorsUpload(db);
+            AuthorsConnect authors = new AuthorsConnect(db);
 
             for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                 Map<String, Object> picture =

@@ -12,10 +12,10 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QuerySnapshot;
 import db_objects.Author;
 
-public class AuthorsUpload {
+public class AuthorsConnect {
     private final Map<String, Author> authorsMap;
 
-    public AuthorsUpload(Firestore db) {
+    public AuthorsConnect(Firestore db) {
         authorsMap = new HashMap<>();
         lazyLoad(db);
     }
