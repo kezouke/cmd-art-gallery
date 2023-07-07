@@ -19,25 +19,22 @@ public class DetailedPictureWindow implements Window {
     public void execute() {
         boolean running = true;
         while (running) {
-            System.out.println(picture.detailedInfo());
             try {
+                System.out.println(picture.detailedInfo());
                 new OutputMessage("files/OutputForAuthor").display();
+
+                String input = scanner.next();
+                if (input.equals("back")) {
+                    running = false;
+                } else if (input.equals("author")) {
+                    new DetailedAuthorWindow(picture.author, scanner).execute();
+                } else {
+                    new OutputMessage("files/OutputForError").display();
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 
-            String input = scanner.next();
-            if (input.equals("back")) {
-                running = false;
-            } else if (input.equals("author")) {
-                new DetailedAuthorWindow(picture.author, scanner).execute();
-            } else {
-                try {
-                    new OutputMessage("files/OutputForError").display();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
         }
     }
 }

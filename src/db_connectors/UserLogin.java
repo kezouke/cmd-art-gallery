@@ -7,7 +7,6 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QuerySnapshot;
 import db_objects.User;
 
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class UserLogin {
@@ -25,10 +24,10 @@ public class UserLogin {
             ApiFuture<QuerySnapshot> query = users.get();
             QuerySnapshot querySnapshot = query.get();
             for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-                Map<String, Object> userMap =
-                        (Map<String, Object>) document.getData().get("user");
-                if (user.hashCode() == (int) userMap.get("uid")) {
-                    return true;
+                if (document.contains("uid")) {
+                    if (user.generateHash().equals(document.getString("uid"))) {
+                        return true;
+                    }
                 }
             }
         } catch (ExecutionException | InterruptedException e) {

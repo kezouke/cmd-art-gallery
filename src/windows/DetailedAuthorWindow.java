@@ -18,28 +18,19 @@ public class DetailedAuthorWindow implements Window {
     @Override
     public void execute() {
         boolean running = true;
-        boolean wrongCommandWasEntered = false;
         while (running) {
-            System.out.println(author.detailedInfo());
             try {
+                System.out.println(author.detailedInfo());
                 new OutputMessage("files/OutputForBackAfterAuthor").display();
+
+                String input = scanner.next();
+                if (input.equals("back")) {
+                    running = false;
+                } else {
+                    new OutputMessage("files/OutputForError").display();
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            }
-            if (wrongCommandWasEntered) {
-                try {
-                    new OutputMessage("files/OutputForError").display();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                wrongCommandWasEntered = false;
-            }
-
-            String input = scanner.next();
-            if (input.equals("back")) {
-                running = false;
-            } else {
-                wrongCommandWasEntered = true;
             }
         }
     }
