@@ -21,32 +21,24 @@ public class MainPicturesWindow implements Window {
         boolean running = true;
         boolean wrongCommandWasEntered = false;
         while (running) {
-
-            for (Picture picture : pictures.values()) {
-                System.out.println(picture.shortInfo());
-            }
             try {
+                for (Picture picture : pictures.values()) {
+                    System.out.println(picture.shortInfo());
+                }
                 new OutputMessage("files/OutputForPicture").display();
+
+                String input = scanner.next();
+                if (input.equals("stop")) {
+                    running = false;
+                } else if (pictures.containsKey(input)) {
+                    new DetailedPictureWindow(pictures.get(input), scanner).execute();
+                } else {
+                    new OutputMessage("files/OutputForError").display();
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            if (wrongCommandWasEntered) {
-                try {
-                    new OutputMessage("files/OutputForError").display();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                wrongCommandWasEntered = false;
-            }
 
-            String input = scanner.next();
-            if (input.equals("stop")) {
-                running = false;
-            } else if (pictures.containsKey(input)) {
-                new DetailedPictureWindow(pictures.get(input), scanner).execute();
-            } else {
-                wrongCommandWasEntered = true;
-            }
         }
     }
 }
