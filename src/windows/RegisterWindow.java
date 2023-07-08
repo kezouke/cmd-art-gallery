@@ -1,7 +1,6 @@
 package windows;
 
 import com.google.cloud.firestore.Firestore;
-import db_connectors.UserLogin;
 import db_connectors.UserRegister;
 import db_objects.User;
 import representation_instruments.OutputMessage;
