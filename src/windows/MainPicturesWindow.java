@@ -19,13 +19,16 @@ public class MainPicturesWindow implements Window {
     @Override
     public void execute() {
         boolean running = true;
-        boolean wrongCommandWasEntered = false;
+        OutputMessage picturesMessage =
+                new OutputMessage("files/OutputForPicture");
+        OutputMessage errorMessage =
+                new OutputMessage("files/OutputForError");
         while (running) {
             try {
                 for (Picture picture : pictures.values()) {
                     System.out.println(picture.shortInfo());
                 }
-                new OutputMessage("files/OutputForPicture").display();
+                picturesMessage.display();
 
                 String input = scanner.next();
                 if (input.equals("stop")) {
@@ -33,7 +36,7 @@ public class MainPicturesWindow implements Window {
                 } else if (pictures.containsKey(input)) {
                     new DetailedPictureWindow(pictures.get(input), scanner).execute();
                 } else {
-                    new OutputMessage("files/OutputForError").display();
+                    errorMessage.display();
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);

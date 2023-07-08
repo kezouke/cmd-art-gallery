@@ -18,16 +18,20 @@ public class DetailedAuthorWindow implements Window {
     @Override
     public void execute() {
         boolean running = true;
+        OutputMessage backMessage =
+                new OutputMessage("files/OutputForBackAfterAuthor");
+        OutputMessage errorMessage =
+                new OutputMessage("files/OutputForError");
         while (running) {
             try {
                 System.out.println(author.detailedInfo());
-                new OutputMessage("files/OutputForBackAfterAuthor").display();
+                backMessage.display();
 
                 String input = scanner.next();
                 if (input.equals("back")) {
                     running = false;
                 } else {
-                    new OutputMessage("files/OutputForError").display();
+                    errorMessage.display();
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);

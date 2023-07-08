@@ -18,10 +18,14 @@ public class DetailedPictureWindow implements Window {
     @Override
     public void execute() {
         boolean running = true;
+        OutputMessage authorMessage =
+                new OutputMessage("files/OutputForAuthor");
+        OutputMessage errorMessage =
+                new OutputMessage("files/OutputForError");
         while (running) {
             try {
                 System.out.println(picture.detailedInfo());
-                new OutputMessage("files/OutputForAuthor").display();
+                authorMessage.display();
 
                 String input = scanner.next();
                 if (input.equals("back")) {
@@ -29,7 +33,7 @@ public class DetailedPictureWindow implements Window {
                 } else if (input.equals("author")) {
                     new DetailedAuthorWindow(picture.author, scanner).execute();
                 } else {
-                    new OutputMessage("files/OutputForError").display();
+                    errorMessage.display();
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
