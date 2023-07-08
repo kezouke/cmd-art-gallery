@@ -21,22 +21,30 @@ public class RegisterWindow implements Window {
     @Override
     public void execute() {
         boolean running = true;
+        OutputMessage enterNameMessage =
+                new OutputMessage("files/OutputForEnterName");
+        OutputMessage enterPasswordMessage =
+                new OutputMessage("files/OutputForEnterPassword");
+        OutputMessage wrongPasswordMessage =
+                new OutputMessage("files/OutputForWrongPasswords");
+        OutputMessage successMessage =
+                new OutputMessage("files/OutputForRegistration");
         while (running) {
             try {
-                new OutputMessage("files/OutputForEnterName").display();
+                enterNameMessage.display();
                 String name = scanner.next();
 
-                new OutputMessage("files/OutputForEnterPassword").display();
+                enterPasswordMessage.display();
                 String password1 = scanner.next();
 
-                new OutputMessage("files/OutputForEnterPassword").display();
+                enterPasswordMessage.display();
                 String password2 = scanner.next();
 
                 if (!password1.equals(password2)) {
-                    new OutputMessage("files/OutputForWrongPasswords").display();
+                    wrongPasswordMessage.display();
                 } else {
                     new UserRegister(new User(name, password1), db);
-                    new OutputMessage("files/OutputForRegistration").display();
+                    successMessage.display();
                     running = false;
                 }
             } catch (IOException e) {

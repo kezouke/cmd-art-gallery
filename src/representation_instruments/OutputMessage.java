@@ -1,25 +1,35 @@
 package representation_instruments;
 
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class OutputMessage {
-    private final FileReader file;
+    private final String fileName;
+    private String fileContent;
+    private boolean isRead = false;
 
     public OutputMessage(String fileName) {
-        try {
-            file = new FileReader(fileName);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+        this.fileName = fileName;
+    }
+
+    private void readFileContent() throws IOException {
+        StringBuilder contentBuilder = new StringBuilder();
+        BufferedReader br = new BufferedReader(new FileReader(fileName));
+        String line;
+        while ((line = br.readLine()) != null) {
+            contentBuilder.append(line);
+            contentBuilder.append(System.lineSeparator());
         }
+        fileContent = contentBuilder.toString();
+
     }
 
     public void display() throws IOException {
-        int c;
-        while((c=file.read())!=-1){
-
-            System.out.print((char)c);
+        if (!isRead) {
+            readFileContent();
+            isRead = true;
         }
+        System.out.print(fileContent);
     }
 }

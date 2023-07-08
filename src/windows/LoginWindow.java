@@ -20,22 +20,29 @@ public class LoginWindow implements Window {
     @Override
     public void execute() {
         boolean running = true;
+        OutputMessage enterNameMessage =
+                new OutputMessage("files/OutputForEnterName");
+        OutputMessage enterPasswordMessage =
+                new OutputMessage("files/OutputForEnterPassword");
+        OutputMessage successMessage =
+                new OutputMessage("files/OutputForLogin");
+        OutputMessage wrongDataMessage =
+                new OutputMessage("files/OutputForWrongLogin");
         while (running) {
             try {
-                new OutputMessage("files/OutputForEnterName").display();
+                enterNameMessage.display();
                 String name = scanner.next();
 
-                new OutputMessage("files/OutputForEnterPassword").display();
+                enterPasswordMessage.display();
                 String password = scanner.next();
 
                 boolean isLogged = new UserLogin(new User(name, password), db).login();
                 if (isLogged) {
-                    running = false;
-                    new OutputMessage("files/OutputForLogin").display();
+                    successMessage.display();
                     return;
                 }
 
-                new OutputMessage("files/OutputForWrongLogin").display();
+                wrongDataMessage.display();
                 String input = scanner.next();
                 if (input.equals("register")) {
                     new RegisterWindow(scanner, db).execute();

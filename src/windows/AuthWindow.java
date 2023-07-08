@@ -19,9 +19,13 @@ public class AuthWindow implements Window {
     public void execute() {
         Firestore db = new FirestoreConnection().db;
         boolean running = true;
+        OutputMessage authMessage =
+                new OutputMessage("files/OutputForAuthPage");
+        OutputMessage errorMessage =
+                new OutputMessage("files/OutputForError");
         while (running) {
             try {
-                new OutputMessage("files/OutputForAuthPage").display();
+                authMessage.display();
                 String input = scanner.next();
                 switch (input) {
                     case "login" -> {
@@ -35,7 +39,7 @@ public class AuthWindow implements Window {
                     case "close" -> {
                         return;
                     }
-                    default -> new OutputMessage("files/OutputForError").display();
+                    default -> errorMessage.display();
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
