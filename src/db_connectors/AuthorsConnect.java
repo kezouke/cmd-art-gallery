@@ -15,9 +15,9 @@ import db_objects.Author;
 public class AuthorsConnect {
     private final Map<String, Author> authorsMap;
 
-    public AuthorsConnect(Firestore db) {
+    public AuthorsConnect(Firestore database) {
         authorsMap = new HashMap<>();
-        lazyLoad(db);
+        lazyLoad(database);
     }
 
     private void lazyLoad(Firestore db) {

@@ -10,7 +10,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class FirestoreConnection {
-    public final Firestore db;
+    public final Firestore database;
     public FirestoreConnection () {
         try {
             FileInputStream serviceAccount = new FileInputStream(
@@ -22,7 +22,7 @@ public class FirestoreConnection {
                     .build();
             FirebaseApp.initializeApp(options);
 
-            db = FirestoreClient.getFirestore();
+            database = FirestoreClient.getFirestore();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

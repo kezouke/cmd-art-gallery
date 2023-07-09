@@ -11,16 +11,16 @@ import java.util.concurrent.ExecutionException;
 
 public class UserLogin {
     private final User user;
-    private final Firestore db;
+    private final Firestore database;
 
-    public UserLogin(User user, Firestore db) {
+    public UserLogin(User user, Firestore database) {
         this.user = user;
-        this.db = db;
+        this.database = database;
     }
 
     public boolean login() {
         try {
-            CollectionReference users = db.collection("users");
+            CollectionReference users = database.collection("users");
             ApiFuture<QuerySnapshot> query = users.get();
             QuerySnapshot querySnapshot = query.get();
             for (DocumentSnapshot document : querySnapshot.getDocuments()) {

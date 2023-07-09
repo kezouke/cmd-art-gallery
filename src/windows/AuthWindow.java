@@ -10,14 +10,15 @@ import java.util.Scanner;
 
 public class AuthWindow implements Window {
     private final Scanner scanner;
+    private final Firestore database;
 
-    public AuthWindow(Scanner scanner) {
+    public AuthWindow(Scanner scanner, Firestore database) {
         this.scanner = scanner;
+        this.database = database;
     }
 
     @Override
     public void execute() {
-        Firestore db = new FirestoreConnection().db;
         boolean running = true;
         OutputMessage authMessage =
                 new OutputMessage("files/OutputForAuthPage");
@@ -29,11 +30,11 @@ public class AuthWindow implements Window {
                 String input = scanner.next();
                 switch (input) {
                     case "login" -> {
-                        new LoginWindow(scanner, db).execute();
+                        new LoginWindow(scanner, database).execute();
                         running = false;
                     }
                     case "register" -> {
-                        new RegisterWindow(scanner, db).execute();
+                        new RegisterWindow(scanner, database).execute();
                         running = false;
                     }
                     case "close" -> {
@@ -45,6 +46,10 @@ public class AuthWindow implements Window {
                 throw new RuntimeException(e);
             }
         }
-        new MainPicturesWindow(new PicturesConnect(db).receivePicture(), scanner).execute();
+        new MainPicturesWindow(
+                new PicturesConnect(database).receivePicture(),
+                scanner,
+                database
+        ).execute();
     }
 }

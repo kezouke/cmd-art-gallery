@@ -4,16 +4,21 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Scanner;
 
+import com.google.cloud.firestore.Firestore;
 import db_objects.Picture;
 import representation_instruments.OutputMessage;
 
 public class MainPicturesWindow implements Window {
     private final Map<String, Picture> pictures;
     private final Scanner scanner;
+    private final Firestore database;
 
-    public MainPicturesWindow(Map<String, Picture> pictures, Scanner scanner) {
+    public MainPicturesWindow(Map<String, Picture> pictures,
+                              Scanner scanner,
+                              Firestore database) {
         this.pictures = pictures;
         this.scanner = scanner;
+        this.database = database;
     }
 
     @Override
@@ -33,6 +38,9 @@ public class MainPicturesWindow implements Window {
                 String input = scanner.next();
                 if (input.equals("stop")) {
                     running = false;
+                } else if (input.equals("logout")) {
+                    running = false;
+                    logout();
                 } else if (pictures.containsKey(input)) {
                     new DetailedPictureWindow(pictures.get(input), scanner).execute();
                 } else {
@@ -43,6 +51,11 @@ public class MainPicturesWindow implements Window {
             }
 
         }
+    }
+
+    private void logout() throws IOException {
+        new OutputMessage("files/OutputForLogout").display();
+        new AuthWindow(scanner, database).execute();
     }
 }
 
