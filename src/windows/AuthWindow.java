@@ -1,7 +1,6 @@
 package windows;
 
 import com.google.cloud.firestore.Firestore;
-import db_connectors.FirestoreConnection;
 import db_connectors.PicturesConnect;
 import representation_instruments.OutputMessage;
 

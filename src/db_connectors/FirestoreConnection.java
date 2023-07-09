@@ -17,7 +17,7 @@ public class FirestoreConnection {
                     System.getProperty("user.dir") + "\\cmd-art-gallery-firebase.json"
             );
             GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
-            FirebaseOptions options = new FirebaseOptions.Builder()
+            FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(credentials)
                     .build();
             FirebaseApp.initializeApp(options);
