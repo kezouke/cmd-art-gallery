@@ -10,19 +10,19 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class FirestoreConnection {
-    public final Firestore db;
+    public final Firestore database;
     public FirestoreConnection () {
         try {
             FileInputStream serviceAccount = new FileInputStream(
                     System.getProperty("user.dir") + "\\cmd-art-gallery-firebase.json"
             );
             GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
-            FirebaseOptions options = new FirebaseOptions.Builder()
+            FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(credentials)
                     .build();
             FirebaseApp.initializeApp(options);
 
-            db = FirestoreClient.getFirestore();
+            database = FirestoreClient.getFirestore();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

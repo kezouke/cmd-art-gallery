@@ -8,11 +8,11 @@ import java.util.Map;
 
 public class UserRegister {
 
-    public UserRegister(User user, Firestore db) {
-        register(user, db);
+    public UserRegister(User user, Firestore database) {
+        registerUser(user, database);
     }
 
-    private void register(User user, Firestore db) {
+    private void registerUser(User user, Firestore db) {
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("uid", user.generateHash());
         CollectionReference users = db.collection("users");

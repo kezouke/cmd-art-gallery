@@ -14,9 +14,9 @@ import java.util.concurrent.ExecutionException;
 public class PicturesConnect {
     private final Map<String, Picture> pictures;
 
-    public PicturesConnect(Firestore db) {
+    public PicturesConnect(Firestore database) {
         pictures = new HashMap<>();
-        lazyLoad(db);
+        lazyLoad(database);
     }
 
     private void lazyLoad(Firestore db) {

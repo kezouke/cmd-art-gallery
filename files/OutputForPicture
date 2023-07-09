@@ -1,5 +1,7 @@
-If you want to see detailed info about picture
+1) If you want to see detailed info about picture
     enter a text with following format: picture#
     where # is Unique Number of picture
-If you want to close application:
+2) If you want to log out from your current account
+    enter 'logout'
+3) If you want to close application:
     enter 'stop'.
