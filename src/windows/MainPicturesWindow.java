@@ -1,22 +1,22 @@
 package windows;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.Scanner;
 
 import com.google.cloud.firestore.Firestore;
+import db_connectors.FirestoreUpdateData;
 import db_objects.Picture;
 import representation_instruments.OutputMessage;
 
 public class MainPicturesWindow implements Window {
-    private final Map<String, Picture> pictures;
+    private final FirestoreUpdateData firestoreUpdate;
     private final Scanner scanner;
     private final Firestore database;
 
-    public MainPicturesWindow(Map<String, Picture> pictures,
+    public MainPicturesWindow(FirestoreUpdateData firestoreUpdate,
                               Scanner scanner,
                               Firestore database) {
-        this.pictures = pictures;
+        this.firestoreUpdate = firestoreUpdate;
         this.scanner = scanner;
         this.database = database;
     }
@@ -30,7 +30,10 @@ public class MainPicturesWindow implements Window {
                 new OutputMessage("files/OutputForError");
         while (running) {
             try {
-                for (Picture picture : pictures.values()) {
+                for (Picture picture : firestoreUpdate.
+                        picturesConnect.
+                        receivePicture()
+                        .values()) {
                     System.out.println(picture.shortInfo());
                 }
                 picturesMessage.display();
@@ -41,8 +44,23 @@ public class MainPicturesWindow implements Window {
                 } else if (input.equals("logout")) {
                     running = false;
                     logout();
-                } else if (pictures.containsKey(input)) {
-                    new DetailedPictureWindow(pictures.get(input), scanner).execute();
+                } else if (input.equals("add")) {
+                    new PictureAddWindow(
+                            scanner,
+                            database,
+                            firestoreUpdate
+                    ).execute();
+                    firestoreUpdate.updateData();
+                } else if (firestoreUpdate
+                        .picturesConnect
+                        .receivePicture()
+                        .containsKey(input)) {
+                    new DetailedPictureWindow(
+                            firestoreUpdate
+                                    .picturesConnect
+                                    .receivePicture()
+                                    .get(input),
+                            scanner).execute();
                 } else {
                     errorMessage.display();
                 }

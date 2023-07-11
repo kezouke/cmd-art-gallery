@@ -1,7 +1,7 @@
 package windows;
 
 import com.google.cloud.firestore.Firestore;
-import db_connectors.PicturesConnect;
+import db_connectors.FirestoreUpdateData;
 import representation_instruments.OutputMessage;
 
 import java.io.IOException;
@@ -45,8 +45,9 @@ public class AuthWindow implements Window {
                 throw new RuntimeException(e);
             }
         }
+
         new MainPicturesWindow(
-                new PicturesConnect(database).receivePicture(),
+                new FirestoreUpdateData(database),
                 scanner,
                 database
         ).execute();

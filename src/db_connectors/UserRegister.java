@@ -15,6 +15,7 @@ public class UserRegister {
     private void registerUser(User user, Firestore db) {
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("uid", user.generateHash());
+        userMap.put("name", user.username);
         CollectionReference users = db.collection("users");
         users.document().set(userMap);
     }

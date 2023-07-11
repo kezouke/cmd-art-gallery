@@ -2,6 +2,9 @@ package db_objects;
 
 import com.google.cloud.Timestamp;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Picture {
     public final Integer id;
     public final Author author;
@@ -37,6 +40,18 @@ public class Picture {
                 "Date of creation:" + year.toDate() + "\n\t" +
                 "Link: " + link + "\n" +
                 author.shortInfo();
+    }
+
+    public Map<String, Object> generatePictureMap() {
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> pictureMap = new HashMap<>();
+        pictureMap.put("id", id);
+        pictureMap.put("name", name);
+        pictureMap.put("link", link);
+        pictureMap.put("year", year);
+        pictureMap.put("author", author.id);
+        resultMap.put("picture", pictureMap);
+        return resultMap;
     }
 }
 
