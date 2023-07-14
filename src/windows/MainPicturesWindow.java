@@ -6,10 +6,12 @@ import java.util.Scanner;
 import com.google.cloud.firestore.Firestore;
 import db_connectors.FirestoreUpdateData;
 import db_objects.Picture;
+import representation_instruments.ArtObjectIterator;
 import representation_instruments.OutputMessage;
 
 public class MainPicturesWindow implements Window {
     private final FirestoreUpdateData firestoreUpdate;
+    private ArtObjectIterator<Picture> pictures;
     private final Scanner scanner;
     private final Firestore database;
 
@@ -19,6 +21,9 @@ public class MainPicturesWindow implements Window {
         this.firestoreUpdate = firestoreUpdate;
         this.scanner = scanner;
         this.database = database;
+        this.pictures = new ArtObjectIterator<>(
+                firestoreUpdate.picturesConnect.receivePicture().values()
+        );
     }
 
     @Override
@@ -28,39 +33,32 @@ public class MainPicturesWindow implements Window {
                 new OutputMessage("files/OutputForPicture");
         OutputMessage errorMessage =
                 new OutputMessage("files/OutputForError");
+        OutputMessage nextPics =
+                new OutputMessage("files/OutputForNextPictures");
+        OutputMessage prevPics =
+                new OutputMessage("files/OutputForPrevPictures");
+
+        pictures = pictures.next();
         while (running) {
             try {
-                for (Picture picture : firestoreUpdate.
-                        picturesConnect.
-                        receivePicture()
-                        .values()) {
-                    System.out.println(picture.shortInfo());
-                }
-                picturesMessage.display();
+                outputMenu(picturesMessage,
+                        nextPics,
+                        prevPics);
 
                 String input = scanner.next();
                 if (input.equals("stop")) {
                     running = false;
+                } else if (input.equals("next")) {
+                    outputNextPics();
+                } else if (input.equals("back")) {
+                    outputPrevPics();
                 } else if (input.equals("logout")) {
                     running = false;
                     logout();
                 } else if (input.equals("add")) {
-                    new PictureAddWindow(
-                            scanner,
-                            database,
-                            firestoreUpdate
-                    ).execute();
-                    firestoreUpdate.updateData();
-                } else if (firestoreUpdate
-                        .picturesConnect
-                        .receivePicture()
-                        .containsKey(input)) {
-                    new DetailedPictureWindow(
-                            firestoreUpdate
-                                    .picturesConnect
-                                    .receivePicture()
-                                    .get(input),
-                            scanner).execute();
+                    addNewPicture();
+                } else if (hasSuchPicture(input)) {
+                    showDetailedPicture(input);
                 } else {
                     errorMessage.display();
                 }
@@ -69,6 +67,73 @@ public class MainPicturesWindow implements Window {
             }
 
         }
+    }
+
+    private void addNewPicture(){
+        new PictureAddWindow(
+                scanner,
+                database,
+                firestoreUpdate
+        ).execute();
+        updatePicturesData();
+        pictures.showArtObjects();
+    }
+
+    private void showDetailedPicture(String input){
+        new DetailedPictureWindow(
+                firestoreUpdate
+                        .picturesConnect
+                        .receivePicture()
+                        .get(input),
+                scanner).execute();
+        pictures.showArtObjects();
+    }
+
+    private void outputMenu(OutputMessage picturesMessage,
+                            OutputMessage nextPics,
+                            OutputMessage prevPics) throws IOException {
+        if (pictures.hasNext()) {
+            nextPics.display();
+        }
+        if (pictures.hasPrev()) {
+            prevPics.display();
+        }
+        picturesMessage.display();
+    }
+
+    private void outputPrevPics() throws IOException {
+        if (pictures.hasPrev()) {
+            pictures = pictures.back();
+        } else {
+            new OutputMessage("files/OutputForNoPrevPics")
+                    .display();
+            pictures.showArtObjects();
+        }
+    }
+
+    private void outputNextPics() throws IOException {
+        if (pictures.hasNext()) {
+            pictures = pictures.next();
+        } else {
+            new OutputMessage("files/OutputForAllPicturesShowed")
+                    .display();
+            pictures.showArtObjects();
+        }
+    }
+
+    private boolean hasSuchPicture(String picture) {
+        return firestoreUpdate
+                .picturesConnect
+                .receivePicture()
+                .containsKey(picture);
+    }
+
+    private void updatePicturesData() {
+        this.firestoreUpdate.updateData();
+        this.pictures = new ArtObjectIterator<>(
+                firestoreUpdate.picturesConnect.receivePicture().values(),
+                pictures.currentStart
+        );
     }
 
     private void logout() throws IOException {

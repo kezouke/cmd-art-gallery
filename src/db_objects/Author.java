@@ -6,7 +6,7 @@ import representation_instruments.FormatTextInWindow;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Author {
+public class Author implements iShortInfo {
     public final Integer id;
     private final String firstName;
     private final String lastName;

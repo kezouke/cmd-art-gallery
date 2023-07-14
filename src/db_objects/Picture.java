@@ -5,7 +5,7 @@ import com.google.cloud.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Picture {
+public class Picture implements iShortInfo {
     public final Integer id;
     public final Author author;
     private final Timestamp year;
