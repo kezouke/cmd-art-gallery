@@ -10,6 +10,7 @@ import representation_instruments.ArtObjectIterator;
 import representation_instruments.OutputMessage;
 
 public class MainPicturesWindow implements Window {
+    private final int step = 3;
     private final FirestoreUpdateData firestoreUpdate;
     private ArtObjectIterator<Picture> pictures;
     private final Scanner scanner;
@@ -22,7 +23,8 @@ public class MainPicturesWindow implements Window {
         this.scanner = scanner;
         this.database = database;
         this.pictures = new ArtObjectIterator<>(
-                firestoreUpdate.picturesConnect.receivePicture().values()
+                firestoreUpdate.picturesConnect.receivePicture().values(),
+                step
         );
     }
 
@@ -132,7 +134,8 @@ public class MainPicturesWindow implements Window {
         this.firestoreUpdate.updateData();
         this.pictures = new ArtObjectIterator<>(
                 firestoreUpdate.picturesConnect.receivePicture().values(),
-                pictures.currentStart
+                pictures.currentStart,
+                step
         );
     }
 
