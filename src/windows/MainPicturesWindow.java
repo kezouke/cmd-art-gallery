@@ -1,6 +1,9 @@
 package windows;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 
 import com.google.cloud.firestore.Firestore;
@@ -23,7 +26,7 @@ public class MainPicturesWindow implements Window {
         this.scanner = scanner;
         this.database = database;
         this.pictures = new ArtObjectIterator<>(
-                firestoreUpdate.picturesConnect.receivePicture().values(),
+                initializeSortedPictures(),
                 step
         );
     }
@@ -71,7 +74,7 @@ public class MainPicturesWindow implements Window {
         }
     }
 
-    private void addNewPicture(){
+    private void addNewPicture() {
         new PictureAddWindow(
                 scanner,
                 database,
@@ -81,7 +84,7 @@ public class MainPicturesWindow implements Window {
         pictures.showArtObjects();
     }
 
-    private void showDetailedPicture(String input){
+    private void showDetailedPicture(String input) {
         new DetailedPictureWindow(
                 firestoreUpdate
                         .picturesConnect
@@ -133,7 +136,7 @@ public class MainPicturesWindow implements Window {
     private void updatePicturesData() {
         this.firestoreUpdate.updateData();
         this.pictures = new ArtObjectIterator<>(
-                firestoreUpdate.picturesConnect.receivePicture().values(),
+                initializeSortedPictures(),
                 pictures.currentStart,
                 step
         );
@@ -143,5 +146,15 @@ public class MainPicturesWindow implements Window {
         new OutputMessage("files/OutputForLogout").display();
         new AuthWindow(scanner, database).execute();
     }
+
+    private List<Picture> initializeSortedPictures() {
+        List<Picture> sortedPictures = new ArrayList<>(
+                firestoreUpdate.picturesConnect.receivePicture().values()
+        );
+        sortedPictures.sort(Comparator
+                .comparingInt(picture -> picture.id));
+        return sortedPictures;
+    }
+
 }
 

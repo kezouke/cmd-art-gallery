@@ -7,6 +7,9 @@ import representation_instruments.ArtObjectIterator;
 import representation_instruments.OutputMessage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 
 public class AllAuthorsWindow implements Window {
@@ -22,9 +25,9 @@ public class AllAuthorsWindow implements Window {
         this.database = database;
         this.firestoreUpdate = firestoreUpdate;
         this.scanner = scanner;
-        this.authors = new ArtObjectIterator<>(firestoreUpdate
-                .authorsConnect
-                .receiveAuthorsList(), step);
+        this.authors = new ArtObjectIterator<>(
+                initializeSortedAuthors(),
+                step);
     }
 
     @Override
@@ -109,9 +112,18 @@ public class AllAuthorsWindow implements Window {
     private void updateAuthorsData() {
         firestoreUpdate.updateData();
         this.authors = new ArtObjectIterator<>(
-                firestoreUpdate.authorsConnect.receiveAuthorsList(),
+                initializeSortedAuthors(),
                 authors.currentStart,
                 step
         );
     }
+
+    private List<Author> initializeSortedAuthors() {
+        List<Author> sortedAuthors = new ArrayList<>(
+                firestoreUpdate.authorsConnect.receiveAuthorsList()
+        );
+        sortedAuthors.sort(Comparator.comparingInt(author -> author.id));
+        return sortedAuthors;
+    }
+
 }
