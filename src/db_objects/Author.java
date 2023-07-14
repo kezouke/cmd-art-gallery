@@ -48,10 +48,11 @@ public class Author implements iShortInfo {
 
     public String detailedInfo() {
         return shortInfo().replace("Short", "Detailed") + "\n\t"
-                + "Dates: " + dateOfBirth.toDate() + "\n\t"
-                + "Biography: " +
+                + "Date of Birth: " + dateOfBirth.toDate() + "\n" +
+                border + "\t" +
+                "Biography: " +
                 new FormatTextInWindow().format(biography, 20)
-                + "\n\t" +
+                + "\n" + border + "\t" +
                 "Country: " + country + "\n" +
                 border;
     }
