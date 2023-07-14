@@ -61,8 +61,7 @@ public class ArtObjectIterator<E extends iShortInfo>
      */
     public void showArtObjects() {
         int currentS = Math.max(currentStart - step, 0);
-        int currentEnd = Math.max(currentS - step, 0);
-        for (int i = currentS - 1; i >= currentEnd; i--) {
+        for (int i = currentS; i < currentStart; i++) {
             iShortInfo artObh = (iShortInfo) artObjects.toArray()[i];
             System.out.println(artObh.shortInfo());
         }
