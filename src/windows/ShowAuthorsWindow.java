@@ -30,6 +30,19 @@ public class ShowAuthorsWindow implements Window {
                 step);
     }
 
+    public ShowAuthorsWindow(Firestore database,
+                             FirestoreUpdateData firestoreUpdate,
+                             Scanner scanner,
+                             List<Author> authors) {
+        this.database = database;
+        this.firestoreUpdate = firestoreUpdate;
+        this.scanner = scanner;
+        authors.sort(Comparator.comparingInt(author -> author.id));
+        this.authors = new ArtObjectIterator<>(
+                authors,
+                step);
+    }
+
     @Override
     public void execute() {
         boolean running = true;

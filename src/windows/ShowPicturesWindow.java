@@ -38,6 +38,7 @@ public class ShowPicturesWindow implements Window {
         this.firestoreUpdate = firestoreUpdate;
         this.scanner = scanner;
         this.database = database;
+        pictures.sort(Comparator.comparingInt(picture -> picture.id));
         this.pictures = new ArtObjectIterator<>(
                 pictures,
                 step

@@ -41,8 +41,14 @@ public class ChooseSearchObjectWindow implements Window {
                         running = false;
                     }
                     case "authors" -> {
-                        // TODO
+                        new SearchAuthorsWindow(
+                                scanner,
+                                firestoreUpdater,
+                                database
+                        ).execute();
+                        running = false;
                     }
+                    case "return" -> running = false;
                     default -> wrongCommand.display();
                 }
             } catch (IOException e) {

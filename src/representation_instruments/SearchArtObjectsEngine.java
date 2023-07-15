@@ -3,6 +3,7 @@ package representation_instruments;
 import db_objects.iMatchWhileSearch;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class SearchArtObjectsEngine<E extends iMatchWhileSearch> {
