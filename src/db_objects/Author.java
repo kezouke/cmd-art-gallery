@@ -74,8 +74,8 @@ public class Author implements iShortInfo, iMatchWhileSearch {
 
     @Override
     public boolean isMatch(String keyword) {
-        return firstName.equalsIgnoreCase(keyword) ||
-                lastName.equalsIgnoreCase(keyword) ||
+        return firstName.contains(keyword) ||
+                lastName.contains(keyword) ||
                 country.equalsIgnoreCase(keyword) ||
                 gender.equalsIgnoreCase(keyword) ||
                 String.valueOf(id).equalsIgnoreCase(keyword);

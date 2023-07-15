@@ -45,10 +45,9 @@ public class AuthWindow implements Window {
                 throw new RuntimeException(e);
             }
         }
-
-        new MainPicturesWindow(
-                new FirestoreUpdateData(database),
+        new MenuWindow(
                 scanner,
+                new FirestoreUpdateData(database),
                 database
         ).execute();
     }

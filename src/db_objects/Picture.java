@@ -56,9 +56,9 @@ public class Picture implements iShortInfo, iMatchWhileSearch {
 
     @Override
     public boolean isMatch(String keyword) {
-        return name.equalsIgnoreCase(keyword) ||
+        return name.contains(keyword) ||
                 String.valueOf(year).equalsIgnoreCase(keyword) ||
-                link.equalsIgnoreCase(keyword) ||
+                link.contains(keyword) ||
                 String.valueOf(id).equalsIgnoreCase(keyword) ||
                 author.isMatch(keyword);
     }

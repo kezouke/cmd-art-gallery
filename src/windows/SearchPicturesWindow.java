@@ -51,7 +51,7 @@ public class SearchPicturesWindow implements Window {
                             inputString
                     );
                     if (!picturesMatched.isEmpty()) {
-                        new MainPicturesWindow(
+                        new ShowPicturesWindow(
                                 firestoreUpdater,
                                 scanner,
                                 firestore,
