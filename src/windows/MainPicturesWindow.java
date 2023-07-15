@@ -31,6 +31,19 @@ public class MainPicturesWindow implements Window {
         );
     }
 
+    public MainPicturesWindow(FirestoreUpdateData firestoreUpdate,
+                              Scanner scanner,
+                              Firestore database,
+                              List<Picture> pictures) {
+        this.firestoreUpdate = firestoreUpdate;
+        this.scanner = scanner;
+        this.database = database;
+        this.pictures = new ArtObjectIterator<>(
+                pictures,
+                step
+        );
+    }
+
     @Override
     public void execute() {
         boolean running = true;

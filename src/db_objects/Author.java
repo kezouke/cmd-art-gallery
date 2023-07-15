@@ -6,7 +6,7 @@ import representation_instruments.FormatTextInWindow;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Author implements iShortInfo {
+public class Author implements iShortInfo, iMatchWhileSearch {
     public final Integer id;
     private final String firstName;
     private final String lastName;
@@ -70,5 +70,14 @@ public class Author implements iShortInfo {
 
         resultMap.put("author", authorMap);
         return resultMap;
+    }
+
+    @Override
+    public boolean isMatch(String keyword) {
+        return firstName.equalsIgnoreCase(keyword) ||
+                lastName.equalsIgnoreCase(keyword) ||
+                country.equalsIgnoreCase(keyword) ||
+                gender.equalsIgnoreCase(keyword) ||
+                String.valueOf(id).equalsIgnoreCase(keyword);
     }
 }
