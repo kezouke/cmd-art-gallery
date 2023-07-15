@@ -1,0 +1,18 @@
+_____________________________________________________
+////////////////////// MAIN MENU \\\\\\\\\\\\\\\\\\\\
+_____________________________________________________
+1) If you want to take a look at all pictures:
+    enter 'pictures'
+_____________________________________________________
+2) If you want to take a look at all authors:
+    enter 'authors'
+_____________________________________________________
+3) If you want to search concrete pictures/authors:
+    enter 'search'
+_____________________________________________________
+4) If you want to logout from your current account:
+    enter 'logout'
+_____________________________________________________
+5) If you want to close application:
+    enter 'close'
+_____________________________________________________

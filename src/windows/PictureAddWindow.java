@@ -101,7 +101,7 @@ public class PictureAddWindow implements Window {
             question.display();
             String input = scanner.next();
             if (input.equals("authors")) {
-                new AllAuthorsWindow(database, firestoreUpdate, scanner).execute();
+                new ShowAuthorsWindow(database, firestoreUpdate, scanner).execute();
             } else {
                 try {
                     int id = Integer.parseInt(input);

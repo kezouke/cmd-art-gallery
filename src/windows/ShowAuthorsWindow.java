@@ -12,21 +12,34 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
-public class AllAuthorsWindow implements Window {
+public class ShowAuthorsWindow implements Window {
     private final int step = 3;
     private final Firestore database;
     private final FirestoreUpdateData firestoreUpdate;
     private final Scanner scanner;
     private ArtObjectIterator<Author> authors;
 
-    public AllAuthorsWindow(Firestore database,
-                            FirestoreUpdateData firestoreUpdate,
-                            Scanner scanner) {
+    public ShowAuthorsWindow(Firestore database,
+                             FirestoreUpdateData firestoreUpdate,
+                             Scanner scanner) {
         this.database = database;
         this.firestoreUpdate = firestoreUpdate;
         this.scanner = scanner;
         this.authors = new ArtObjectIterator<>(
                 initializeSortedAuthors(),
+                step);
+    }
+
+    public ShowAuthorsWindow(Firestore database,
+                             FirestoreUpdateData firestoreUpdate,
+                             Scanner scanner,
+                             List<Author> authors) {
+        this.database = database;
+        this.firestoreUpdate = firestoreUpdate;
+        this.scanner = scanner;
+        authors.sort(Comparator.comparingInt(author -> author.id));
+        this.authors = new ArtObjectIterator<>(
+                authors,
                 step);
     }
 
@@ -51,11 +64,11 @@ public class AllAuthorsWindow implements Window {
 
                 String input = scanner.next();
                 switch (input) {
-                    case "yes" -> {
+                    case "add" -> {
                         addNewAuthor();
                         running = false;
                     }
-                    case "no" -> running = false;
+                    case "return" -> running = false;
                     case "next" -> outputNextAuths();
                     case "back" -> outputPrevAuthors();
                     default -> error.display();

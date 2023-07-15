@@ -5,7 +5,5 @@ Menu:
     where # is Unique Number of picture
 2) If you want to add new picture
     enter 'add'
-3) If you want to log out from your current account
-    enter 'logout'
-4) If you want to close application:
-    enter 'stop'.
+3) If you want to return back to main menu:
+    enter 'return'

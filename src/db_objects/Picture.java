@@ -5,7 +5,7 @@ import com.google.cloud.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Picture implements iShortInfo {
+public class Picture implements iShortInfo, iMatchWhileSearch {
     public final Integer id;
     public final Author author;
     private final Timestamp year;
@@ -52,6 +52,15 @@ public class Picture implements iShortInfo {
         pictureMap.put("author", author.id);
         resultMap.put("picture", pictureMap);
         return resultMap;
+    }
+
+    @Override
+    public boolean isMatch(String keyword) {
+        return name.contains(keyword) ||
+                String.valueOf(year).equalsIgnoreCase(keyword) ||
+                link.contains(keyword) ||
+                String.valueOf(id).equalsIgnoreCase(keyword) ||
+                author.isMatch(keyword);
     }
 }
 

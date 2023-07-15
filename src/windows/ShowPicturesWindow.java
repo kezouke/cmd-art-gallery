@@ -12,14 +12,14 @@ import db_objects.Picture;
 import representation_instruments.ArtObjectIterator;
 import representation_instruments.OutputMessage;
 
-public class MainPicturesWindow implements Window {
+public class ShowPicturesWindow implements Window {
     private final int step = 3;
     private final FirestoreUpdateData firestoreUpdate;
     private ArtObjectIterator<Picture> pictures;
     private final Scanner scanner;
     private final Firestore database;
 
-    public MainPicturesWindow(FirestoreUpdateData firestoreUpdate,
+    public ShowPicturesWindow(FirestoreUpdateData firestoreUpdate,
                               Scanner scanner,
                               Firestore database) {
         this.firestoreUpdate = firestoreUpdate;
@@ -27,6 +27,20 @@ public class MainPicturesWindow implements Window {
         this.database = database;
         this.pictures = new ArtObjectIterator<>(
                 initializeSortedPictures(),
+                step
+        );
+    }
+
+    public ShowPicturesWindow(FirestoreUpdateData firestoreUpdate,
+                              Scanner scanner,
+                              Firestore database,
+                              List<Picture> pictures) {
+        this.firestoreUpdate = firestoreUpdate;
+        this.scanner = scanner;
+        this.database = database;
+        pictures.sort(Comparator.comparingInt(picture -> picture.id));
+        this.pictures = new ArtObjectIterator<>(
+                pictures,
                 step
         );
     }
@@ -51,15 +65,12 @@ public class MainPicturesWindow implements Window {
                         prevPics);
 
                 String input = scanner.next();
-                if (input.equals("stop")) {
+                if (input.equals("return")) {
                     running = false;
                 } else if (input.equals("next")) {
                     outputNextPics();
                 } else if (input.equals("back")) {
                     outputPrevPics();
-                } else if (input.equals("logout")) {
-                    running = false;
-                    logout();
                 } else if (input.equals("add")) {
                     addNewPicture();
                 } else if (hasSuchPicture(input)) {
@@ -140,11 +151,6 @@ public class MainPicturesWindow implements Window {
                 pictures.currentStart,
                 step
         );
-    }
-
-    private void logout() throws IOException {
-        new OutputMessage("files/OutputForLogout").display();
-        new AuthWindow(scanner, database).execute();
     }
 
     private List<Picture> initializeSortedPictures() {
