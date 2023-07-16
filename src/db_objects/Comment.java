@@ -1,6 +1,6 @@
 package db_objects;
 
-import representation_instruments.FormatTextInWindow;
+import representation_instruments.work_with_text.FormatTextInWindow;
 
 import java.util.HashMap;
 import java.util.Map;
