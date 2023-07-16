@@ -1,7 +1,7 @@
 package main;
 
-import db_connectors.FirestoreConnection;
-import windows.AuthWindow;
+import db_connectors.firebase.FirestoreConnection;
+import windows.auth.AuthWindow;
 
 import java.util.Scanner;
 
