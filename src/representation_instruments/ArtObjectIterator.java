@@ -25,6 +25,10 @@ public class ArtObjectIterator<E extends iShortInfo>
         this.step = step;
     }
 
+    public boolean isEmpty() {
+        return artObjects.isEmpty();
+    }
+
     /**
      * Returns {@code true} if the iteration has more elements.
      * (In other words, returns {@code true} if {@link #next} would

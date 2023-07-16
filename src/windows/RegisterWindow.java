@@ -11,6 +11,7 @@ import java.util.Scanner;
 public class RegisterWindow implements Window {
     private final Scanner scanner;
     private final Firestore db;
+    public User currentUser;
 
     public RegisterWindow(Scanner scanner, Firestore db) {
         this.scanner = scanner;
@@ -42,7 +43,8 @@ public class RegisterWindow implements Window {
                 if (!password1.equals(password2)) {
                     wrongPasswordMessage.display();
                 } else {
-                    new UserRegister(new User(name, password1), db);
+                    currentUser = new User(name, password1);
+                    new UserRegister(currentUser, db);
                     successMessage.display();
                     running = false;
                 }

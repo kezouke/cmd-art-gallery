@@ -11,6 +11,7 @@ import java.util.Scanner;
 public class LoginWindow implements Window {
     private final Scanner scanner;
     private final Firestore db;
+    public User currentUser;
 
     public LoginWindow(Scanner scanner, Firestore db) {
         this.scanner = scanner;
@@ -36,7 +37,9 @@ public class LoginWindow implements Window {
                 enterPasswordMessage.display();
                 String password = scanner.next();
 
-                boolean isLogged = new UserLogin(new User(name, password), db).login();
+                currentUser = new User(name, password);
+
+                boolean isLogged = new UserLogin(currentUser, db).login();
                 if (isLogged) {
                     successMessage.display();
                     return;

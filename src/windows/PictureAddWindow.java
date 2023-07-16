@@ -10,6 +10,7 @@ import representation_instruments.OutputMessage;
 import representation_instruments.ParseLongText;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class PictureAddWindow implements Window {
@@ -85,7 +86,8 @@ public class PictureAddWindow implements Window {
                 author,
                 picDate,
                 name,
-                link
+                link,
+                new ArrayList<>()
         );
     }
 
