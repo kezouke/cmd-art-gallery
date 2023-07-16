@@ -1,11 +1,9 @@
 package windows;
 
-import com.google.cloud.Timestamp;
+
 import com.google.cloud.firestore.Firestore;
-import db_connectors.AuthorUpload;
 import db_connectors.CommentUpload;
 import db_connectors.FirestoreUpdateData;
-import db_objects.Author;
 import db_objects.Comment;
 import db_objects.Picture;
 import representation_instruments.OutputMessage;
