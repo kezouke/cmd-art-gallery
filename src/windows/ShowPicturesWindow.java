@@ -97,6 +97,8 @@ public class ShowPicturesWindow implements Window {
 
     private void showDetailedPicture(String input) {
         new DetailedPictureWindow(
+                firestoreUpdate,
+                database,
                 firestoreUpdate
                         .picturesConnect
                         .receivePicture()

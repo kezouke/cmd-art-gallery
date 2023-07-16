@@ -12,7 +12,6 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QuerySnapshot;
 import db_objects.Author;
-import org.checkerframework.checker.units.qual.A;
 
 public class AuthorsConnect {
     private final Map<Integer, Author> authorsMap;

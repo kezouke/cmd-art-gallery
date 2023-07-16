@@ -3,11 +3,13 @@ package db_objects;
 import com.google.cloud.Timestamp;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Picture implements iShortInfo, iMatchWhileSearch {
     public final Integer id;
     public final Author author;
+    public final List<Comment> comments;
     private final Timestamp year;
     private final String name;
     private final String link;
@@ -16,12 +18,14 @@ public class Picture implements iShortInfo, iMatchWhileSearch {
                    Author author,
                    Timestamp year,
                    String name,
-                   String link) {
+                   String link,
+                   List<Comment> comments) {
         this.id = id;
         this.author = author;
         this.year = year;
         this.name = name;
         this.link = link;
+        this.comments = comments;
     }
 
     public String shortInfo() {

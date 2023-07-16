@@ -2,6 +2,7 @@ package windows;
 
 import com.google.cloud.firestore.Firestore;
 import db_connectors.FirestoreUpdateData;
+import db_objects.User;
 import representation_instruments.OutputMessage;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.util.Scanner;
 public class AuthWindow implements Window {
     private final Scanner scanner;
     private final Firestore database;
+    private User currentUser;
 
     public AuthWindow(Scanner scanner, Firestore database) {
         this.scanner = scanner;
@@ -29,11 +31,20 @@ public class AuthWindow implements Window {
                 String input = scanner.next();
                 switch (input) {
                     case "login" -> {
-                        new LoginWindow(scanner, database).execute();
+                        LoginWindow loginWindow = new LoginWindow(
+                                scanner, database
+                        );
+                        loginWindow.execute();
+                        currentUser = loginWindow.currentUser;
                         running = false;
                     }
                     case "register" -> {
-                        new RegisterWindow(scanner, database).execute();
+                        RegisterWindow registerWindow = new RegisterWindow(
+                                scanner,
+                                database
+                        );
+                        registerWindow.execute();
+                        currentUser = registerWindow.currentUser;
                         running = false;
                     }
                     case "close" -> {
@@ -47,7 +58,7 @@ public class AuthWindow implements Window {
         }
         new MenuWindow(
                 scanner,
-                new FirestoreUpdateData(database),
+                new FirestoreUpdateData(database, currentUser),
                 database
         ).execute();
     }

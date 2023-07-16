@@ -14,11 +14,15 @@ import java.util.concurrent.ExecutionException;
 
 public class PicturesConnect {
     private final Map<String, Picture> pictures;
+    private final CommentsConnect comments;
     private final AuthorsConnect authors;
     public int lastPictureId = 1;
 
-    public PicturesConnect(Firestore database, AuthorsConnect authors) {
+    public PicturesConnect(Firestore database,
+                           AuthorsConnect authors,
+                           CommentsConnect comments) {
         this.authors = authors;
+        this.comments = comments;
         pictures = new HashMap<>();
         lazyLoad(database);
     }
@@ -32,15 +36,18 @@ public class PicturesConnect {
             for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                 Map<String, Object> picture =
                         (Map<String, Object>) document.getData().get("picture");
+                int currentPictureId = ((Long) picture.get("id")).intValue();
+
                 pictures.put(
-                        "picture" + picture.get("id").toString(),
+                        "picture" + currentPictureId,
                         new Picture(
-                                ((Long) picture.get("id")).intValue(),
+                                currentPictureId,
                                 authors.receiveAuthor(
                                         ((Long) picture.get("author")).intValue()),
                                 (Timestamp) picture.get("year"),
                                 (String) picture.get("name"),
-                                (String) picture.get("link")
+                                (String) picture.get("link"),
+                                comments.receiveComments(currentPictureId)
                         )
                 );
                 lastPictureId = Math.max(lastPictureId, ((Long) picture.get("id")).intValue());
