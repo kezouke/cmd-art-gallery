@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class AuthWindow implements Window {
     private final Scanner scanner;
     private final Firestore database;
-    private User currentUser;
+    public User currentUser;
 
     public AuthWindow(Scanner scanner, Firestore database) {
         this.scanner = scanner;
@@ -58,10 +58,5 @@ public class AuthWindow implements Window {
                 throw new RuntimeException(e);
             }
         }
-        new MenuWindow(
-                scanner,
-                new FirestoreUpdateData(database, currentUser),
-                database
-        ).execute();
     }
 }

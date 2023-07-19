@@ -108,8 +108,7 @@ public class ShowPicturesWindow implements Window {
                         .receivePicture()
                         .get(input),
                 scanner).execute();
-        updatePicturesDataWithStartIndex(
-                0
+        updatePicturesDataFromStart(
         );
         this.pictures = pictures.next();
     }
@@ -162,11 +161,11 @@ public class ShowPicturesWindow implements Window {
         );
     }
 
-    private void updatePicturesDataWithStartIndex(int start) {
+    private void updatePicturesDataFromStart() {
         this.firestoreUpdate.updateData();
         this.pictures = new ArtObjectIterator<>(
                 initializeSortedPictures(),
-                start,
+                0,
                 step
         );
     }
