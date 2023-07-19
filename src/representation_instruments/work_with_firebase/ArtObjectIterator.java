@@ -92,4 +92,8 @@ public class ArtObjectIterator<E extends iShortInfo>
         int prevStart = Math.max(currentStart - 2 * step, 0);
         return new ArtObjectIterator<>(artObjects, prevStart, step).next();
     }
+
+    public int size() {
+        return artObjects.size();
+    }
 }

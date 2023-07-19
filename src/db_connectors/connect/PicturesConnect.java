@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class PicturesConnect {
-    private final Map<String, Picture> pictures;
+    private Map<String, Picture> pictures;
     private final CommentsConnect comments;
     private final AuthorsConnect authors;
     public int lastPictureId = 1;
@@ -23,7 +23,6 @@ public class PicturesConnect {
                            CommentsConnect comments) {
         this.authors = authors;
         this.comments = comments;
-        pictures = new HashMap<>();
         lazyLoad(database);
     }
 
@@ -32,6 +31,8 @@ public class PicturesConnect {
             CollectionReference collection = db.collection("pictures");
             ApiFuture<QuerySnapshot> query = collection.get();
             QuerySnapshot querySnapshot = query.get();
+
+            pictures = new HashMap<>();
 
             for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                 Map<String, Object> picture =

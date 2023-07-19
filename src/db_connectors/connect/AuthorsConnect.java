@@ -14,11 +14,10 @@ import com.google.cloud.firestore.QuerySnapshot;
 import db_objects.Author;
 
 public class AuthorsConnect {
-    private final Map<Integer, Author> authorsMap;
+    private Map<Integer, Author> authorsMap;
     public int lastAuthorId = 1;
 
     public AuthorsConnect(Firestore database) {
-        authorsMap = new HashMap<>();
         lazyLoad(database);
     }
 
@@ -27,6 +26,8 @@ public class AuthorsConnect {
             CollectionReference authors = db.collection("author");
             ApiFuture<QuerySnapshot> query = authors.get();
             QuerySnapshot querySnapshot = query.get();
+
+            authorsMap = new HashMap<>();
 
             for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                 Map<String, Object> author =
