@@ -3,8 +3,10 @@ package windows.detailed_view_windows;
 import com.google.cloud.firestore.Firestore;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_objects.Picture;
+import exceptions.ObjectWasRemoved;
 import representation_instruments.work_with_text.OutputMessage;
 import windows.Window;
+import windows.remove.RemovePictureWindow;
 import windows.show_windows.ShowCommentsWindow;
 
 import java.io.IOException;
@@ -43,7 +45,9 @@ public class DetailedPictureWindow implements Window {
                     case "back" -> running = false;
                     case "author" -> new DetailedAuthorWindow(
                             picture.author,
-                            scanner
+                            scanner,
+                            database,
+                            firestoreUpdater
                     ).execute();
                     case "comments" -> new ShowCommentsWindow(
                             firestoreUpdater,
@@ -51,12 +55,26 @@ public class DetailedPictureWindow implements Window {
                             database,
                             picture
                     ).execute();
+                    case "remove" -> {
+                        removeProcess();
+                        running = false;
+                    }
                     default -> errorMessage.display();
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
+            } catch (ObjectWasRemoved e) {
+                running = false;
             }
 
         }
+    }
+
+    private void removeProcess(){
+        new RemovePictureWindow(database,
+                firestoreUpdater,
+                scanner,
+                picture.id)
+                .execute();
     }
 }
