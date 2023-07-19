@@ -9,6 +9,7 @@ import java.util.Scanner;
 import com.google.cloud.firestore.Firestore;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_objects.Picture;
+import db_objects.UserRole;
 import representation_instruments.work_with_firebase.ArtObjectIterator;
 import representation_instruments.work_with_text.OutputMessage;
 import windows.detailed_view_windows.DetailedPictureWindow;
@@ -59,11 +60,15 @@ public class ShowPicturesWindow implements Window {
                 new OutputMessage("files/OutputForNextPictures");
         OutputMessage prevPics =
                 new OutputMessage("files/OutputForPrevPictures");
+        OutputMessage signedInUserOptions =
+                new OutputMessage("files/" +
+                        "OutputForPicturesWhenUserSignedIn");
 
         pictures = pictures.next();
         while (running) {
             try {
                 outputMenu(picturesMessage,
+                        signedInUserOptions,
                         nextPics,
                         prevPics);
 
@@ -88,14 +93,20 @@ public class ShowPicturesWindow implements Window {
         }
     }
 
-    private void addNewPicture() {
-        new PictureAddWindow(
-                scanner,
-                database,
-                firestoreUpdate
-        ).execute();
-        updatePicturesData();
-        pictures.showArtObjects();
+    private void addNewPicture() throws IOException {
+        if (firestoreUpdate.currentUser.role != UserRole.UNSIGNED) {
+            new PictureAddWindow(
+                    scanner,
+                    database,
+                    firestoreUpdate
+            ).execute();
+            updatePicturesData();
+            pictures.showArtObjects();
+        } else {
+            new OutputMessage("files/" +
+                    "OutputForLowPermissionsUnsigned")
+                    .display();
+        }
     }
 
 
@@ -114,6 +125,7 @@ public class ShowPicturesWindow implements Window {
     }
 
     private void outputMenu(OutputMessage picturesMessage,
+                            OutputMessage signedInUserOptions,
                             OutputMessage nextPics,
                             OutputMessage prevPics) throws IOException {
         if (pictures.hasNext()) {
@@ -123,6 +135,9 @@ public class ShowPicturesWindow implements Window {
             prevPics.display();
         }
         picturesMessage.display();
+        if (firestoreUpdate.currentUser.role != UserRole.UNSIGNED) {
+            signedInUserOptions.display();
+        }
     }
 
     private void outputPrevPics() throws IOException {

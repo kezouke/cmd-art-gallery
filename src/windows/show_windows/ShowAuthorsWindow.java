@@ -3,6 +3,7 @@ package windows.show_windows;
 import com.google.cloud.firestore.Firestore;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_objects.Author;
+import db_objects.UserRole;
 import representation_instruments.work_with_firebase.ArtObjectIterator;
 import representation_instruments.work_with_text.OutputMessage;
 import windows.add_windows.AuthorAddWindow;
@@ -56,11 +57,14 @@ public class ShowAuthorsWindow implements Window {
                 new OutputMessage("files/OutputForNextAuths");
         OutputMessage prevAuths =
                 new OutputMessage("files/OutputForPrevAuths");
-
+        OutputMessage signedInOptions =
+                new OutputMessage("files/" +
+                        "OutputForSignedInUsersToAddAuthor");
         authors = authors.next();
         while (running) {
             try {
                 outputMenu(isWantToAddAuthorMessage,
+                        signedInOptions,
                         nextAuths,
                         prevAuths);
 
@@ -82,6 +86,7 @@ public class ShowAuthorsWindow implements Window {
     }
 
     private void outputMenu(OutputMessage addAuthsMessage,
+                            OutputMessage signedInOptions,
                             OutputMessage nextAuths,
                             OutputMessage prevAuths) throws IOException {
         if (authors.hasNext()) {
@@ -91,6 +96,10 @@ public class ShowAuthorsWindow implements Window {
             prevAuths.display();
         }
         addAuthsMessage.display();
+        if (firestoreUpdate.currentUser.role
+                != UserRole.UNSIGNED) {
+            signedInOptions.display();
+        }
     }
 
     private void outputNextAuths() throws IOException {
@@ -114,14 +123,21 @@ public class ShowAuthorsWindow implements Window {
     }
 
     private void addNewAuthor() throws IOException {
-        new AuthorAddWindow(
-                scanner,
-                database,
-                firestoreUpdate
-        ).execute();
-        new OutputMessage("files/author_add/OutputForSuccess")
-                .display();
-        updateAuthorsData();
+        if (firestoreUpdate.currentUser.role !=
+                UserRole.UNSIGNED) {
+            new AuthorAddWindow(
+                    scanner,
+                    database,
+                    firestoreUpdate
+            ).execute();
+            new OutputMessage("files/author_add/OutputForSuccess")
+                    .display();
+            updateAuthorsData();
+        } else {
+            new OutputMessage("files/" +
+                    "OutputForLowPermissionsUnsigned")
+                    .display();
+        }
     }
 
     private void updateAuthorsData() {

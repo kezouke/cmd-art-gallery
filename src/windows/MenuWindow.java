@@ -51,7 +51,7 @@ public class MenuWindow implements Window {
                             firestoreUpdater,
                             database
                     ).execute();
-                    case "logout" -> {
+                    case "change" -> {
                         logout();
                         running = false;
                     }
