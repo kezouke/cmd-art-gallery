@@ -1,10 +1,8 @@
 package windows.auth;
 
 import com.google.cloud.firestore.Firestore;
-import db_connectors.firebase.FirestoreUpdateData;
 import db_objects.User;
 import representation_instruments.work_with_text.OutputMessage;
-import windows.MenuWindow;
 import windows.Window;
 
 import java.io.IOException;
