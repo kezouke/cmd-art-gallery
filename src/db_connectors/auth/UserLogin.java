@@ -6,7 +6,9 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QuerySnapshot;
 import db_objects.User;
+import db_objects.UserRole;
 
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 public class UserLogin {
@@ -18,7 +20,8 @@ public class UserLogin {
         this.database = database;
     }
 
-    public boolean login() {
+    public UserRole obtainUserRole() {
+        String role = " ";
         try {
             CollectionReference users = database.collection("users");
             ApiFuture<QuerySnapshot> query = users.get();
@@ -26,13 +29,26 @@ public class UserLogin {
             for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                 if (document.contains("uid")) {
                     if (user.generateHash().equals(document.getString("uid"))) {
-                        return true;
+                        role = document.getString("role");
                     }
                 }
             }
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-        return false;
+        if (role == null) {
+            role = " ";
+        }
+        switch (role) {
+            case "admin" -> {
+                return UserRole.ADMIN;
+            }
+            case "signed" -> {
+                return UserRole.SIGNED;
+            }
+            default -> {
+                return UserRole.UNSIGNED;
+            }
+        }
     }
 }

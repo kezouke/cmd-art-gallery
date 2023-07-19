@@ -3,6 +3,7 @@ package windows.auth;
 import com.google.cloud.firestore.Firestore;
 import db_connectors.auth.UserLogin;
 import db_objects.User;
+import db_objects.UserRole;
 import representation_instruments.work_with_text.OutputMessage;
 import windows.Window;
 
@@ -30,6 +31,8 @@ public class LoginWindow implements Window {
                 new OutputMessage("files/OutputForLogin");
         OutputMessage wrongDataMessage =
                 new OutputMessage("files/OutputForWrongLogin");
+        OutputMessage unsignedContinue =
+                new OutputMessage("files/OutputForUnsignedLogin");
         while (running) {
             try {
                 enterNameMessage.display();
@@ -40,16 +43,20 @@ public class LoginWindow implements Window {
 
                 currentUser = new User(name, password);
 
-                boolean isLogged = new UserLogin(currentUser, db).login();
-                if (isLogged) {
+                UserLogin loginEngine = new UserLogin(currentUser, db);
+                currentUser.role = loginEngine.obtainUserRole();
+                if (currentUser.role != UserRole.UNSIGNED) {
                     successMessage.display();
-                    return;
+                    running = false;
                 }
 
                 wrongDataMessage.display();
                 String input = scanner.next();
                 if (input.equals("register")) {
                     new RegisterWindow(scanner, db).execute();
+                    running = false;
+                } else if (input.equals("continue")) {
+                    unsignedContinue.display();
                     running = false;
                 }
             } catch (IOException e) {

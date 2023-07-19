@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 public class User {
     public final String username;
     private final String password;
+    public UserRole role;
 
     public User(String username, String password) {
         this.username = username;

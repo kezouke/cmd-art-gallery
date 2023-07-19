@@ -3,6 +3,7 @@ package windows.auth;
 import com.google.cloud.firestore.Firestore;
 import db_connectors.auth.UserRegister;
 import db_objects.User;
+import db_objects.UserRole;
 import representation_instruments.work_with_text.OutputMessage;
 import windows.Window;
 
@@ -45,6 +46,7 @@ public class RegisterWindow implements Window {
                     wrongPasswordMessage.display();
                 } else {
                     currentUser = new User(name, password1);
+                    currentUser.role = UserRole.SIGNED;
                     new UserRegister(currentUser, db);
                     successMessage.display();
                     running = false;
