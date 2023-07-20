@@ -36,7 +36,7 @@ public class UpdateUserRoleWindowMessage {
                         - 'admin'
                         - 'signed'
                         - unsigned'
-                New role: """;
+                New role:\s""";
         System.out.print(message);
     }
 
