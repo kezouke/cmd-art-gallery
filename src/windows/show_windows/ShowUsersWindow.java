@@ -8,6 +8,7 @@ import instruments.window_messages.show_windows.ShowUsersWindowMessage;
 import instruments.work_with_firebase.ArtObjectIterator;
 import windows.Window;
 import windows.remove.RemoveUserWindow;
+import windows.update.UpdateUserRoleWindow;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -53,6 +54,7 @@ public class ShowUsersWindow implements Window {
                     case "next" -> outputNextUsers();
                     case "back" -> outputPrevUsers();
                     case "remove-user" -> removeUser();
+                    case "change-role" -> updateUser();
                     default -> messageEngine
                             .outputWrongCommandEntered();
                 }
@@ -84,6 +86,16 @@ public class ShowUsersWindow implements Window {
 
     private void removeUser() {
         new RemoveUserWindow(
+                database,
+                firestoreUpdate,
+                scanner
+        ).execute();
+        updateUsersData();
+        users = users.next();
+    }
+
+    private void updateUser() {
+        new UpdateUserRoleWindow(
                 database,
                 firestoreUpdate,
                 scanner
