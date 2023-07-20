@@ -8,7 +8,6 @@ import exceptions.UserNowNotAnAdmin;
 import exceptions.UserRemovedHisSelf;
 import instruments.window_messages.show_windows.ShowUsersWindowMessage;
 import instruments.work_with_firebase.ArtObjectIterator;
-import windows.InitialWindow;
 import windows.Window;
 import windows.remove.RemoveUserWindow;
 import windows.update.UpdateUserRoleWindow;

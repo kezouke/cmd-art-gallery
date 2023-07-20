@@ -8,7 +8,6 @@ import db_connectors.update.ChangeUserRole;
 import db_objects.UserRole;
 import exceptions.UserNowNotAnAdmin;
 import instruments.window_messages.update.UpdateUserRoleWindowMessage;
-import windows.InitialWindow;
 import windows.Window;
 
 import java.util.Scanner;

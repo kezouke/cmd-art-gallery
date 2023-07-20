@@ -8,7 +8,6 @@ import db_connectors.remove.RemoveUser;
 import db_objects.UserRole;
 import exceptions.UserRemovedHisSelf;
 import instruments.window_messages.remove_windows.RemoveUserWindowMessage;
-import windows.InitialWindow;
 import windows.Window;
 
 import java.util.Scanner;

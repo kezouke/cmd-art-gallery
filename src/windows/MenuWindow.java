@@ -57,9 +57,7 @@ public class MenuWindow implements Window {
                         logout();
                         running = false;
                     }
-                    case "users" -> {
-                        showUsers();
-                    }
+                    case "users" -> showUsers();
                     case "close" -> running = false;
                     default -> menuMessages
                             .outputWrongCommandEnteredMessage();
