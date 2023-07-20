@@ -8,7 +8,6 @@ import com.google.cloud.firestore.QuerySnapshot;
 import db_objects.User;
 import db_objects.UserRole;
 
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 public class UserLogin {

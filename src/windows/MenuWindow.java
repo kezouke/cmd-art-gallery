@@ -3,7 +3,6 @@ package windows;
 import com.google.cloud.firestore.Firestore;
 import db_connectors.firebase.FirestoreUpdateData;
 import representation_instruments.work_with_text.OutputMessage;
-import windows.auth.AuthWindow;
 import windows.search_windows.ChooseSearchObjectWindow;
 import windows.show_windows.ShowAuthorsWindow;
 import windows.show_windows.ShowPicturesWindow;
