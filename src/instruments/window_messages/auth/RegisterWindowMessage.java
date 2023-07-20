@@ -40,4 +40,12 @@ public class RegisterWindowMessage {
                 """;
         System.out.println(message);
     }
+
+    public void outputSuchUserNameExists() {
+        String message = """
+                Unfortunately, such username already exists!
+                Please, try again :(
+                """;
+        System.out.println(message);
+    }
 }

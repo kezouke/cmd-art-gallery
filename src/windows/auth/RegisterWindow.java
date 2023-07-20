@@ -1,6 +1,7 @@
 package windows.auth;
 
 import com.google.cloud.firestore.Firestore;
+import db_connectors.auth.UserExistenceCheck;
 import db_connectors.auth.UserRegister;
 import db_objects.User;
 import db_objects.UserRole;
@@ -36,7 +37,10 @@ public class RegisterWindow implements Window {
             messageEngine.outputForEnterPasswordAgain();
             String password2 = scanner.next();
             // check are entered passwords the same
-            if (!password1.equals(password2)) {
+            if (new UserExistenceCheck(db)
+                    .isExist(name)) {
+                messageEngine.outputSuchUserNameExists();
+            } else if (!password1.equals(password2)) {
                 messageEngine
                         .outputForNotTheSameEnteredPasswords();
             } else if (!new PasswordCheck()
