@@ -4,14 +4,18 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class User {
+public class User implements iShortInfo {
     public final String username;
-    private final String password;
+    private String password;
     public UserRole role;
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public User(String username) {
+        this.username = username;
     }
 
     public String generateHash() {
@@ -27,5 +31,23 @@ public class User {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public String shortInfo() {
+        String border = "_________________________________\n";
+        return border +
+                "username: " + username + "\n" +
+                border +
+                "role: " + roleToString() + "\n" +
+                border;
+    }
+
+    private String roleToString() {
+        return switch (role) {
+            case ADMIN -> "admin";
+            case SIGNED -> "signed";
+            case UNSIGNED -> "unsigned";
+        };
     }
 }
