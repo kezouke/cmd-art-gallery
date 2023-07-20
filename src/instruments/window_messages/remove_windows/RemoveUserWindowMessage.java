@@ -1,5 +1,6 @@
 package instruments.window_messages.remove_windows;
 
+import exceptions.UserRemovedHisSelf;
 import instruments.window_messages.WrongCommandMessage;
 
 public class RemoveUserWindowMessage {
@@ -37,6 +38,8 @@ public class RemoveUserWindowMessage {
             message = """
                     You successfully removed yourself!
                     """;
+            System.out.println(message);
+            throw new UserRemovedHisSelf();
         } else {
             message = """
                     User was deleted successfully!

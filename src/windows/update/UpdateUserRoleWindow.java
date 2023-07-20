@@ -6,7 +6,9 @@ import db_connectors.connect.UsersConnect;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_connectors.update.ChangeUserRole;
 import db_objects.UserRole;
+import exceptions.UserNowNotAnAdmin;
 import instruments.window_messages.update.UpdateUserRoleWindowMessage;
+import windows.InitialWindow;
 import windows.Window;
 
 import java.util.Scanner;
@@ -19,8 +21,8 @@ public class UpdateUserRoleWindow implements Window {
     private final UpdateUserRoleWindowMessage messageEngine;
 
     public UpdateUserRoleWindow(Firestore database,
-                            FirestoreUpdateData firestoreUpdater,
-                            Scanner scanner
+                                FirestoreUpdateData firestoreUpdater,
+                                Scanner scanner
     ) {
         this.database = database;
         this.firestoreUpdater = firestoreUpdater;
@@ -44,7 +46,12 @@ public class UpdateUserRoleWindow implements Window {
                     default -> messageEngine
                             .outputForWrongCommand();
                 }
-            } catch (Exception e) {
+            } catch (UserNowNotAnAdmin e) {
+                new InitialWindow(
+                        database,
+                        scanner
+                ).execute();
+            } catch (ExecutionException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -67,6 +74,7 @@ public class UpdateUserRoleWindow implements Window {
                 running = false;
             } else {
                 changeUserRole(usersConnector, input);
+                checkIsUserStillAdmin();
                 running = false;
             }
         }
@@ -108,5 +116,11 @@ public class UpdateUserRoleWindow implements Window {
                 firestoreUpdater
         ).changeRole(username, getRoleFromString(scanner.next()));
         messageEngine.outputForSuccess();
+    }
+
+    private void checkIsUserStillAdmin() {
+        if (firestoreUpdater.currentUser.role != UserRole.ADMIN) {
+            throw new UserNowNotAnAdmin();
+        }
     }
 }

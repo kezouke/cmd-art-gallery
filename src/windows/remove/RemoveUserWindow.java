@@ -6,7 +6,9 @@ import db_connectors.connect.UsersConnect;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_connectors.remove.RemoveUser;
 import db_objects.UserRole;
+import exceptions.UserRemovedHisSelf;
 import instruments.window_messages.remove_windows.RemoveUserWindowMessage;
+import windows.InitialWindow;
 import windows.Window;
 
 import java.util.Scanner;
@@ -44,7 +46,12 @@ public class RemoveUserWindow implements Window {
                     default -> messageEngine
                             .outputWrongCommandEnteredMessage();
                 }
-            } catch (Exception e) {
+            } catch (UserRemovedHisSelf e) {
+                new InitialWindow(
+                        database,
+                        scanner
+                ).execute();
+            } catch (ExecutionException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
