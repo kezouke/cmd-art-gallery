@@ -3,10 +3,9 @@ package windows.remove;
 import com.google.cloud.firestore.Firestore;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_connectors.remove.RemovePicture;
-import representation_instruments.work_with_text.OutputMessage;
+import representation_instruments.window_messages.remove_windows.RemovePictureWindowMessage;
 import windows.Window;
 
-import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
@@ -29,18 +28,11 @@ public class RemovePictureWindow implements Window {
     @Override
     public void execute() {
         boolean running = true;
-        OutputMessage askIsSure =
-                new OutputMessage("files/remove/" +
-                        "OutputForRemovePicture");
-        OutputMessage success =
-                new OutputMessage("files/remove/" +
-                        "OutputForSuccessWhileRemoving");
-        OutputMessage wrongCommand =
-                new OutputMessage("files/OutputForError");
+        RemovePictureWindowMessage messageEngine
+                = new RemovePictureWindowMessage();
         while (running) {
             try {
-                askIsSure.display();
-
+                messageEngine.outputQuestionIsUserSure();
                 String input = scanner.next();
                 switch (input) {
                     case "yes" -> {
@@ -48,15 +40,15 @@ public class RemovePictureWindow implements Window {
                                 database,
                                 firestoreUpdater
                         ).removeById(id);
-                        success.display();
+                        messageEngine.outputSuccessDeletion();
                         firestoreUpdater.updateData();
                         running = false;
                     }
                     case "no" -> running = false;
-                    default -> wrongCommand.display();
+                    default -> messageEngine
+                            .outputWrongCommandEnteredMessage();
                 }
-            } catch (IOException
-                     | ExecutionException
+            } catch (ExecutionException
                      | InterruptedException e) {
                 throw new RuntimeException(e);
             }

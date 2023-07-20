@@ -4,8 +4,8 @@ import com.google.cloud.firestore.Firestore;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_objects.Author;
 import db_objects.UserRole;
+import representation_instruments.window_messages.show_windows.ShowAuthorsWindowMessage;
 import representation_instruments.work_with_firebase.ArtObjectIterator;
-import representation_instruments.work_with_text.OutputMessage;
 import windows.add_windows.AuthorAddWindow;
 import windows.Window;
 
@@ -20,6 +20,7 @@ public class ShowAuthorsWindow implements Window {
     private final Firestore database;
     private final FirestoreUpdateData firestoreUpdate;
     private final Scanner scanner;
+    private final ShowAuthorsWindowMessage messageEngine;
     private ArtObjectIterator<Author> authors;
 
     public ShowAuthorsWindow(Firestore database,
@@ -31,6 +32,7 @@ public class ShowAuthorsWindow implements Window {
         this.authors = new ArtObjectIterator<>(
                 initializeSortedAuthors(),
                 step);
+        this.messageEngine = new ShowAuthorsWindowMessage();
     }
 
     public ShowAuthorsWindow(Firestore database,
@@ -44,29 +46,20 @@ public class ShowAuthorsWindow implements Window {
         this.authors = new ArtObjectIterator<>(
                 authors,
                 step);
+        this.messageEngine = new ShowAuthorsWindowMessage();
     }
 
     @Override
     public void execute() {
         boolean running = true;
-        OutputMessage isWantToAddAuthorMessage =
-                new OutputMessage("files/OutputForAllAuthors");
-        OutputMessage error =
-                new OutputMessage("files/OutputForError");
-        OutputMessage nextAuths =
-                new OutputMessage("files/OutputForNextAuths");
-        OutputMessage prevAuths =
-                new OutputMessage("files/OutputForPrevAuths");
-        OutputMessage signedInOptions =
-                new OutputMessage("files/" +
-                        "OutputForSignedInUsersToAddAuthor");
         authors = authors.next();
         while (running) {
             try {
-                outputMenu(isWantToAddAuthorMessage,
-                        signedInOptions,
-                        nextAuths,
-                        prevAuths);
+                messageEngine.outputMenu(
+                        authors.hasNext(),
+                        authors.hasPrev(),
+                        firestoreUpdate.currentUser.role
+                );
 
                 String input = scanner.next();
                 switch (input) {
@@ -80,7 +73,7 @@ public class ShowAuthorsWindow implements Window {
                     case "return" -> running = false;
                     case "next" -> outputNextAuths();
                     case "back" -> outputPrevAuthors();
-                    default -> error.display();
+                    default -> messageEngine.outputWrongCommandEntered();
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -88,29 +81,11 @@ public class ShowAuthorsWindow implements Window {
         }
     }
 
-    private void outputMenu(OutputMessage addAuthsMessage,
-                            OutputMessage signedInOptions,
-                            OutputMessage nextAuths,
-                            OutputMessage prevAuths) throws IOException {
-        if (authors.hasNext()) {
-            nextAuths.display();
-        }
-        if (authors.hasPrev()) {
-            prevAuths.display();
-        }
-        addAuthsMessage.display();
-        if (firestoreUpdate.currentUser.role
-                != UserRole.UNSIGNED) {
-            signedInOptions.display();
-        }
-    }
-
     private void outputNextAuths() throws IOException {
         if (authors.hasNext()) {
             authors = authors.next();
         } else {
-            new OutputMessage("files/OutputForAllAuthorsShowed")
-                    .display();
+            messageEngine.outputNoMoreAuthors();
             authors.showArtObjects();
         }
     }
@@ -119,8 +94,7 @@ public class ShowAuthorsWindow implements Window {
         if (authors.hasPrev()) {
             authors = authors.back();
         } else {
-            new OutputMessage("files/OutputForNoPrevAuths")
-                    .display();
+            messageEngine.outputNoPrevAuthors();
             authors.showArtObjects();
         }
     }
@@ -133,14 +107,11 @@ public class ShowAuthorsWindow implements Window {
                     database,
                     firestoreUpdate
             ).execute();
-            new OutputMessage("files/author_add/OutputForSuccess")
-                    .display();
+            messageEngine.outputSuccessAddedAuthor();
             updateAuthorsData();
             return true;
         } else {
-            new OutputMessage("files/" +
-                    "OutputForLowPermissionsUnsigned")
-                    .display();
+            messageEngine.outputLowPermissionMessage();
             return false;
         }
     }

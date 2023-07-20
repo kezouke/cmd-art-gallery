@@ -6,6 +6,7 @@ import db_connectors.upload.CommentUpload;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_objects.Comment;
 import db_objects.Picture;
+import representation_instruments.window_messages.add_windows.AddCommentWindowMessage;
 import representation_instruments.work_with_text.OutputMessage;
 import representation_instruments.work_with_text.ParseLongText;
 import windows.Window;
@@ -18,6 +19,7 @@ public class AddCommentWindow implements Window {
     private final Firestore database;
     private final FirestoreUpdateData firestoreUpdate;
     private final Picture picture;
+    private final AddCommentWindowMessage messageEngine;
 
     public AddCommentWindow(Scanner scanner,
                            Firestore database,
@@ -27,34 +29,25 @@ public class AddCommentWindow implements Window {
         this.database = database;
         this.firestoreUpdate = firestoreUpdate;
         this.picture = picture;
+        this.messageEngine = new AddCommentWindowMessage();
     }
 
     @Override
     public void execute() {
         boolean running = true;
-        OutputMessage greetings =
-                new OutputMessage(
-                        "files/comment_add/" +
-                                "OutputForGreetingsWhileAddingComment"
-                );
-        OutputMessage success =
-                new OutputMessage("files/comment_add/" +
-                        "OutputForSuccess");
-        OutputMessage error =
-                new OutputMessage("files/OutputForError");
         while (running) {
             try {
-                greetings.display();
+                messageEngine.outputIsUserSureToAdd();
                 String isUserSure = scanner.next();
                 if (isUserSure.equals("no")) {
                     running = false;
                 } else if (isUserSure.equals("yes")) {
                     new CommentUpload(database, firestoreUpdate)
                             .uploadComment(askData());
-                    success.display();
+                    messageEngine.outputSuccessAdd();
                     running = false;
                 } else {
-                    error.display();
+                    messageEngine.outputWrongCommandEntered();
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -66,8 +59,7 @@ public class AddCommentWindow implements Window {
     private Comment askData() throws IOException {
         ParseLongText longTextReader = new ParseLongText(scanner);
         // Ask User to Enter comment
-        new OutputMessage("files/comment_add/OutputForEnterComment")
-                .display();
+        messageEngine.outputForEnterAComment();
         String comment = longTextReader.getText();
         return new Comment(
                 ++firestoreUpdate

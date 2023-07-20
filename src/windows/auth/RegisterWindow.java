@@ -4,10 +4,9 @@ import com.google.cloud.firestore.Firestore;
 import db_connectors.auth.UserRegister;
 import db_objects.User;
 import db_objects.UserRole;
-import representation_instruments.work_with_text.OutputMessage;
+import representation_instruments.window_messages.auth.RegisterWindowMessage;
 import windows.Window;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class RegisterWindow implements Window {
@@ -23,36 +22,28 @@ public class RegisterWindow implements Window {
     @Override
     public void execute() {
         boolean running = true;
-        OutputMessage enterNameMessage =
-                new OutputMessage("files/OutputForEnterName");
-        OutputMessage enterPasswordMessage =
-                new OutputMessage("files/OutputForEnterPassword");
-        OutputMessage wrongPasswordMessage =
-                new OutputMessage("files/OutputForWrongPasswords");
-        OutputMessage successMessage =
-                new OutputMessage("files/OutputForRegistration");
+        RegisterWindowMessage messageEngine =
+                new RegisterWindowMessage();
         while (running) {
-            try {
-                enterNameMessage.display();
-                String name = scanner.next();
-
-                enterPasswordMessage.display();
-                String password1 = scanner.next();
-
-                enterPasswordMessage.display();
-                String password2 = scanner.next();
-
-                if (!password1.equals(password2)) {
-                    wrongPasswordMessage.display();
-                } else {
-                    currentUser = new User(name, password1);
-                    currentUser.role = UserRole.SIGNED;
-                    new UserRegister(currentUser, db);
-                    successMessage.display();
-                    running = false;
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            // ask to enter name
+            messageEngine.outputForEnterName();
+            String name = scanner.next();
+            // ask to enter password
+            messageEngine.outputForEnterPassword();
+            String password1 = scanner.next();
+            // ask to enter password again
+            messageEngine.outputForEnterPasswordAgain();
+            String password2 = scanner.next();
+            // check are entered passwords the same
+            if (!password1.equals(password2)) {
+                messageEngine
+                        .outputForNotTheSameEnteredPasswords();
+            } else {
+                currentUser = new User(name, password1);
+                currentUser.role = UserRole.SIGNED;
+                new UserRegister(currentUser, db);
+                messageEngine.outputForSuccessRegistration();
+                running = false;
             }
         }
     }

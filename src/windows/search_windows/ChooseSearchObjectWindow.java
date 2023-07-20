@@ -2,16 +2,16 @@ package windows.search_windows;
 
 import com.google.cloud.firestore.Firestore;
 import db_connectors.firebase.FirestoreUpdateData;
-import representation_instruments.work_with_text.OutputMessage;
+import representation_instruments.window_messages.search_windows.ChooseSearchObjectWindowMessage;
 import windows.Window;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class ChooseSearchObjectWindow implements Window {
     private final Scanner scanner;
     private final FirestoreUpdateData firestoreUpdater;
     private final Firestore database;
+    private final ChooseSearchObjectWindowMessage messageEngine;
 
     public ChooseSearchObjectWindow(Scanner scanner,
                                     FirestoreUpdateData firestoreUpdater,
@@ -19,41 +19,35 @@ public class ChooseSearchObjectWindow implements Window {
         this.scanner = scanner;
         this.firestoreUpdater = firestoreUpdater;
         this.database = database;
+        this.messageEngine = new ChooseSearchObjectWindowMessage();
     }
 
     @Override
     public void execute() {
-        OutputMessage chooseObjMessage =
-                new OutputMessage("files/OutputToChoseSearchObject");
-        OutputMessage wrongCommand =
-                new OutputMessage("files/OutputForError");
         boolean running = true;
         while (running) {
-            try {
-                chooseObjMessage.display();
-                String input = scanner.next();
-                switch (input) {
-                    case "pictures" -> {
-                        new SearchPicturesWindow(
-                                scanner,
-                                firestoreUpdater,
-                                database
-                        ).execute();
-                        running = false;
-                    }
-                    case "authors" -> {
-                        new SearchAuthorsWindow(
-                                scanner,
-                                firestoreUpdater,
-                                database
-                        ).execute();
-                        running = false;
-                    }
-                    case "return" -> running = false;
-                    default -> wrongCommand.display();
+            messageEngine.outputVariantsToChose();
+            String input = scanner.next();
+            switch (input) {
+                case "pictures" -> {
+                    new SearchPicturesWindow(
+                            scanner,
+                            firestoreUpdater,
+                            database
+                    ).execute();
+                    running = false;
                 }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                case "authors" -> {
+                    new SearchAuthorsWindow(
+                            scanner,
+                            firestoreUpdater,
+                            database
+                    ).execute();
+                    running = false;
+                }
+                case "return" -> running = false;
+                default -> messageEngine
+                        .outputWrongCommandEnteredMessage();
             }
         }
     }

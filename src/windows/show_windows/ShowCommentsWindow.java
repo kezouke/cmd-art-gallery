@@ -5,8 +5,8 @@ import db_connectors.firebase.FirestoreUpdateData;
 import db_objects.Comment;
 import db_objects.Picture;
 import db_objects.UserRole;
+import representation_instruments.window_messages.show_windows.ShowCommentsWindowMessage;
 import representation_instruments.work_with_firebase.ArtObjectIterator;
-import representation_instruments.work_with_text.OutputMessage;
 import windows.add_windows.AddCommentWindow;
 import windows.Window;
 
@@ -22,6 +22,7 @@ public class ShowCommentsWindow implements Window {
     private ArtObjectIterator<Comment> comments;
     private final Scanner scanner;
     private final Firestore database;
+    private final ShowCommentsWindowMessage messageEngine;
 
     public ShowCommentsWindow(FirestoreUpdateData firestoreUpdate,
                               Scanner scanner,
@@ -35,34 +36,24 @@ public class ShowCommentsWindow implements Window {
                 initializeSortedComments(),
                 step
         );
+        this.messageEngine = new ShowCommentsWindowMessage();
     }
 
 
     @Override
     public void execute() {
         boolean running = true;
-        OutputMessage commentsMessage =
-                new OutputMessage("files/OutputForComments");
-        OutputMessage errorMessage =
-                new OutputMessage("files/OutputForError");
-        OutputMessage nextComments =
-                new OutputMessage("files/OutputForNextComments");
-        OutputMessage prevComments =
-                new OutputMessage("files/OutputForPrevComments");
-        OutputMessage emptyComments =
-                new OutputMessage("files/OutputForNoComments");
-        OutputMessage signedInOptions =
-                new OutputMessage("files/OutputForAddingComment");
         if (comments.hasNext()) {
             comments = comments.next();
         }
         while (running) {
             try {
-                outputMenu(commentsMessage,
-                        signedInOptions,
-                        nextComments,
-                        prevComments,
-                        emptyComments);
+                messageEngine.outputMenu(
+                        comments.isEmpty(),
+                        comments.hasNext(),
+                        comments.hasPrev(),
+                        firestoreUpdate.currentUser.role
+                );
 
                 String input = scanner.next();
                 switch (input) {
@@ -70,7 +61,8 @@ public class ShowCommentsWindow implements Window {
                     case "next" -> outputNextComments();
                     case "back" -> outputPrevComments();
                     case "add" -> addNewComment();
-                    default -> errorMessage.display();
+                    default -> messageEngine
+                            .outputWrongCommandEntered();
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -90,32 +82,7 @@ public class ShowCommentsWindow implements Window {
             updateCommentsData();
             comments.showArtObjects();
         } else {
-            new OutputMessage("files/" +
-                    "OutputForLowPermissionsUnsigned")
-                    .display();
-        }
-    }
-
-    private void outputMenu(OutputMessage commentsMessage,
-                            OutputMessage signedInOptions,
-                            OutputMessage nextComments,
-                            OutputMessage prevComments,
-                            OutputMessage emptyComments) throws IOException {
-        if (comments.isEmpty()) {
-            emptyComments.display();
-        } else {
-            if (comments.hasNext()) {
-                nextComments.display();
-            }
-            if (comments.hasPrev()) {
-                prevComments.display();
-            }
-        }
-
-        commentsMessage.display();
-        if (firestoreUpdate.currentUser.role
-                != UserRole.UNSIGNED) {
-            signedInOptions.display();
+            messageEngine.outputLowPermission();
         }
     }
 
@@ -123,8 +90,7 @@ public class ShowCommentsWindow implements Window {
         if (comments.hasPrev()) {
             comments = comments.back();
         } else {
-            new OutputMessage("files/OutputForNoPrevComments")
-                    .display();
+            messageEngine.outputNoPrevComments();
             comments.showArtObjects();
         }
     }
@@ -133,8 +99,7 @@ public class ShowCommentsWindow implements Window {
         if (comments.hasNext()) {
             comments = comments.next();
         } else {
-            new OutputMessage("files/OutputForAllPicturesShowed")
-                    .display();
+            messageEngine.outputNoNextComments();
             comments.showArtObjects();
         }
     }

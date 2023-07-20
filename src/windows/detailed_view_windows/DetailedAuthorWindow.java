@@ -6,11 +6,10 @@ import db_connectors.remove.RemovePicture;
 import db_objects.Author;
 import db_objects.UserRole;
 import exceptions.ObjectWasRemoved;
-import representation_instruments.work_with_text.OutputMessage;
+import representation_instruments.window_messages.detailed_view_window.DetailedAuthorWindowMessage;
 import windows.Window;
 import windows.remove.RemoveAuthorWindow;
 
-import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
@@ -19,6 +18,7 @@ public class DetailedAuthorWindow implements Window {
     private final Scanner scanner;
     private final Firestore database;
     private final FirestoreUpdateData firestoreUpdater;
+    private final DetailedAuthorWindowMessage messageEngine;
 
     public DetailedAuthorWindow(Author author,
                                 Scanner scanner,
@@ -28,22 +28,18 @@ public class DetailedAuthorWindow implements Window {
         this.scanner = scanner;
         this.database = database;
         this.firestoreUpdater = firestoreUpdater;
+        this.messageEngine = new DetailedAuthorWindowMessage();
     }
 
     @Override
     public void execute() {
         boolean running = true;
-        OutputMessage backMessage =
-                new OutputMessage("files/OutputForDetailedAuthor");
-        OutputMessage errorMessage =
-                new OutputMessage("files/OutputForError");
-        OutputMessage adminOption =
-                new OutputMessage("files/OutputForRemoveAuthor");
         while (running) {
             try {
-                showMenu(author.detailedInfo(),
-                        backMessage,
-                        adminOption);
+                messageEngine.outputMenu(
+                        author.detailedInfo(),
+                        firestoreUpdater.currentUser.role
+                );
 
                 String input = scanner.next();
                 if (input.equals("back")) {
@@ -55,10 +51,9 @@ public class DetailedAuthorWindow implements Window {
                     // -> we don't need to show this window
                     running = !isDone;
                 } else {
-                    errorMessage.display();
+                    messageEngine.outputWrongCommandWasEntered();
                 }
-            } catch (IOException
-                     | ExecutionException
+            } catch (ExecutionException
                      | InterruptedException e) {
                 throw new RuntimeException(e);
             } catch (ObjectWasRemoved e) {
@@ -67,20 +62,9 @@ public class DetailedAuthorWindow implements Window {
         }
     }
 
-    private void showMenu(String detailedInfo,
-                          OutputMessage initialOptions,
-                          OutputMessage adminOptions) throws IOException {
-        System.out.println(detailedInfo);
-        initialOptions.display();
-        if (firestoreUpdater.currentUser.role
-                == UserRole.ADMIN) {
-            adminOptions.display();
-        }
-    }
-
     private boolean removeProcess() throws ExecutionException,
             InterruptedException,
-            ObjectWasRemoved, IOException {
+            ObjectWasRemoved {
         if (firestoreUpdater.currentUser.role == UserRole.ADMIN) {
             new RemoveAuthorWindow(
                     database,
@@ -94,9 +78,7 @@ public class DetailedAuthorWindow implements Window {
             ).removeByAuthorId(author.id);
             throw new ObjectWasRemoved();
         } else {
-            new OutputMessage("files/" +
-                    "OutputForLowPermissionsAdmin")
-                    .display();
+            messageEngine.outputLowPermissionMessage();
             return false;
         }
 
