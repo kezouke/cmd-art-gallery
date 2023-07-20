@@ -4,8 +4,11 @@ import com.google.cloud.firestore.Firestore;
 import db_connectors.connect.UsersConnect;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_objects.User;
+import exceptions.UserNowNotAnAdmin;
+import exceptions.UserRemovedHisSelf;
 import instruments.window_messages.show_windows.ShowUsersWindowMessage;
 import instruments.work_with_firebase.ArtObjectIterator;
+import windows.InitialWindow;
 import windows.Window;
 import windows.remove.RemoveUserWindow;
 import windows.update.UpdateUserRoleWindow;
@@ -55,9 +58,14 @@ public class ShowUsersWindow implements Window {
                     case "back" -> outputPrevUsers();
                     case "remove-user" -> removeUser();
                     case "change-role" -> updateUser();
-                    default -> messageEngine
-                            .outputWrongCommandEntered();
+                    default -> {
+                        messageEngine
+                                .outputWrongCommandEntered();
+                        users.showArtObjects();
+                    }
                 }
+            } catch (UserRemovedHisSelf | UserNowNotAnAdmin e) {
+                throw new UserRemovedHisSelf();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

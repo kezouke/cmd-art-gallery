@@ -3,6 +3,7 @@ package windows;
 import com.google.cloud.firestore.Firestore;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_objects.UserRole;
+import exceptions.UserRemovedHisSelf;
 import instruments.window_messages.MenuWindowMessage;
 import windows.search_windows.ChooseSearchObjectWindow;
 import windows.show_windows.ShowAuthorsWindow;
@@ -56,11 +57,19 @@ public class MenuWindow implements Window {
                         logout();
                         running = false;
                     }
-                    case "users" -> showUsers();
+                    case "users" -> {
+                        showUsers();
+                    }
                     case "close" -> running = false;
                     default -> menuMessages
                             .outputWrongCommandEnteredMessage();
                 }
+            } catch (UserRemovedHisSelf e) {
+                new InitialWindow(
+                        database,
+                        scanner
+                ).execute();
+                running = false;
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -76,12 +85,13 @@ public class MenuWindow implements Window {
     }
 
     private void showUsers() {
-        if(firestoreUpdater.currentUser.role == UserRole.ADMIN) {
+        if (firestoreUpdater.currentUser.role == UserRole.ADMIN) {
             new ShowUsersWindow(
                     firestoreUpdater,
                     scanner,
                     database
             ).execute();
+            firestoreUpdater.updateData();
         } else {
             menuMessages.outputForLowPermissions();
         }

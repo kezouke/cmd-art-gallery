@@ -10,7 +10,7 @@ public class UpdateUserRoleWindowMessage {
                 You are going to change user's role.
                 Are you sure? (yes/no)
                 """;
-        System.out.println(message);
+        System.out.print(message);
     }
 
     public void outputNoSuchUserExists() {
@@ -22,7 +22,7 @@ public class UpdateUserRoleWindowMessage {
                 Please, enter a username of user you want to update:
                     ~ or enter 'return' to return back
                 """;
-        System.out.println(message);
+        System.out.print(message);
     }
 
     public void outputForSuccess() {
@@ -53,7 +53,7 @@ public class UpdateUserRoleWindowMessage {
         String message = """
                 Sorry, but you can update role of another admin!
                 """;
-        System.out.println(message);
+        System.out.print(message);
     }
 
     public void outputForWrongCommand() {

@@ -47,10 +47,7 @@ public class RemoveUserWindow implements Window {
                             .outputWrongCommandEnteredMessage();
                 }
             } catch (UserRemovedHisSelf e) {
-                new InitialWindow(
-                        database,
-                        scanner
-                ).execute();
+                throw new UserRemovedHisSelf();
             } catch (ExecutionException | InterruptedException e) {
                 throw new RuntimeException(e);
             }

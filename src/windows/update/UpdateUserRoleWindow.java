@@ -47,10 +47,7 @@ public class UpdateUserRoleWindow implements Window {
                             .outputForWrongCommand();
                 }
             } catch (UserNowNotAnAdmin e) {
-                new InitialWindow(
-                        database,
-                        scanner
-                ).execute();
+                throw new UserNowNotAnAdmin();
             } catch (ExecutionException | InterruptedException e) {
                 throw new RuntimeException(e);
             }

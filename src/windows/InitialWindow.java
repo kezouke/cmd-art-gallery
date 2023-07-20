@@ -28,6 +28,9 @@ public class InitialWindow implements Window {
                 database
         );
         authWindow.execute();
+        if (authWindow.currentUser == null) {
+            return;
+        }
         new MenuWindow(
                 scanner,
                 new FirestoreUpdateData(

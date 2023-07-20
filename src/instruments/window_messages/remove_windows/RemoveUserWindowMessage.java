@@ -10,7 +10,7 @@ public class RemoveUserWindowMessage {
                 You are going to remove some of the users.
                 Are you sure? (yes/no)
                 """;
-        System.out.println(message);
+        System.out.print(message);
     }
 
     public void outputEnterUsername() {
@@ -18,7 +18,7 @@ public class RemoveUserWindowMessage {
                 Please, enter a username of user you want to delete:
                     ~ or enter 'return' to return back
                 """;
-        System.out.println(message);
+        System.out.print(message);
     }
 
     public void outputNoSuchUserExists() {
@@ -28,7 +28,7 @@ public class RemoveUserWindowMessage {
                                 
                 Please, try again.
                 """;
-        System.out.println(message);
+        System.out.print(message);
     }
 
     public void outputForSuccess(String userRemover,
@@ -40,12 +40,12 @@ public class RemoveUserWindowMessage {
                     """;
             System.out.println(message);
             throw new UserRemovedHisSelf();
-        } else {
-            message = """
-                    User was deleted successfully!
-                    """;
+
         }
-        System.out.println(message);
+        message = """
+                User was deleted successfully!
+                """;
+        System.out.print(message);
     }
 
     public void outputCannotRemoveAnotherAdmin() {
