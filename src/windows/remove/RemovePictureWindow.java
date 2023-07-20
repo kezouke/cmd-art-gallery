@@ -3,7 +3,7 @@ package windows.remove;
 import com.google.cloud.firestore.Firestore;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_connectors.remove.RemovePicture;
-import representation_instruments.window_messages.remove_windows.RemovePictureWindowMessage;
+import instruments.window_messages.remove_windows.RemovePictureWindowMessage;
 import windows.Window;
 
 import java.util.Scanner;

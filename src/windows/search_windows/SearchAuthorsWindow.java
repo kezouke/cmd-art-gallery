@@ -3,8 +3,8 @@ package windows.search_windows;
 import com.google.cloud.firestore.Firestore;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_objects.Author;
-import representation_instruments.window_messages.search_windows.SearchWindowMessage;
-import representation_instruments.work_with_firebase.SearchArtObjectsEngine;
+import instruments.window_messages.search_windows.SearchWindowMessage;
+import instruments.work_with_firebase.SearchArtObjectsEngine;
 import windows.Window;
 import windows.show_windows.ShowAuthorsWindow;
 

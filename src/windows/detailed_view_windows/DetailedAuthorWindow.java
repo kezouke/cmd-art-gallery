@@ -6,7 +6,7 @@ import db_connectors.remove.RemovePicture;
 import db_objects.Author;
 import db_objects.UserRole;
 import exceptions.ObjectWasRemoved;
-import representation_instruments.window_messages.detailed_view_window.DetailedAuthorWindowMessage;
+import instruments.window_messages.detailed_view_window.DetailedAuthorWindowMessage;
 import windows.Window;
 import windows.remove.RemoveAuthorWindow;
 

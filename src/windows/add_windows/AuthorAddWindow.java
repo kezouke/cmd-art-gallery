@@ -5,8 +5,8 @@ import com.google.cloud.firestore.Firestore;
 import db_connectors.upload.AuthorUpload;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_objects.Author;
-import representation_instruments.window_messages.add_windows.AuthorAddWindowMessage;
-import representation_instruments.work_with_text.ParseLongText;
+import instruments.window_messages.add_windows.AuthorAddWindowMessage;
+import instruments.work_with_text.ParseLongText;
 import windows.Window;
 
 import java.io.IOException;

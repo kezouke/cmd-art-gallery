@@ -3,7 +3,7 @@ package windows.auth;
 import com.google.cloud.firestore.Firestore;
 import db_objects.User;
 import db_objects.UserRole;
-import representation_instruments.window_messages.auth.AuthWindowMessage;
+import instruments.window_messages.auth.AuthWindowMessage;
 import windows.Window;
 
 import java.util.Scanner;

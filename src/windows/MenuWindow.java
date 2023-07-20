@@ -2,7 +2,7 @@ package windows;
 
 import com.google.cloud.firestore.Firestore;
 import db_connectors.firebase.FirestoreUpdateData;
-import representation_instruments.window_messages.MenuWindowMessage;
+import instruments.window_messages.MenuWindowMessage;
 import windows.search_windows.ChooseSearchObjectWindow;
 import windows.show_windows.ShowAuthorsWindow;
 import windows.show_windows.ShowPicturesWindow;

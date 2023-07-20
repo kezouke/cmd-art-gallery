@@ -2,7 +2,7 @@ package windows.search_windows;
 
 import com.google.cloud.firestore.Firestore;
 import db_connectors.firebase.FirestoreUpdateData;
-import representation_instruments.window_messages.search_windows.ChooseSearchObjectWindowMessage;
+import instruments.window_messages.search_windows.ChooseSearchObjectWindowMessage;
 import windows.Window;
 
 import java.util.Scanner;

@@ -4,8 +4,8 @@ import com.google.cloud.firestore.Firestore;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_objects.Author;
 import db_objects.UserRole;
-import representation_instruments.window_messages.show_windows.ShowAuthorsWindowMessage;
-import representation_instruments.work_with_firebase.ArtObjectIterator;
+import instruments.window_messages.show_windows.ShowAuthorsWindowMessage;
+import instruments.work_with_firebase.ArtObjectIterator;
 import windows.add_windows.AuthorAddWindow;
 import windows.Window;
 
