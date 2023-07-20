@@ -6,8 +6,8 @@ import db_connectors.firebase.FirestoreUpdateData;
 import db_connectors.upload.PictureUpload;
 import db_objects.Author;
 import db_objects.Picture;
-import representation_instruments.window_messages.add_windows.PictureAddWindowMessage;
-import representation_instruments.work_with_text.ParseLongText;
+import instruments.window_messages.add_windows.PictureAddWindowMessage;
+import instruments.work_with_text.ParseLongText;
 import windows.Window;
 import windows.show_windows.ShowAuthorsWindow;
 

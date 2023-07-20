@@ -5,8 +5,8 @@ import db_connectors.firebase.FirestoreUpdateData;
 import db_objects.Comment;
 import db_objects.Picture;
 import db_objects.UserRole;
-import representation_instruments.window_messages.show_windows.ShowCommentsWindowMessage;
-import representation_instruments.work_with_firebase.ArtObjectIterator;
+import instruments.window_messages.show_windows.ShowCommentsWindowMessage;
+import instruments.work_with_firebase.ArtObjectIterator;
 import windows.add_windows.AddCommentWindow;
 import windows.Window;
 

@@ -5,7 +5,7 @@ import db_connectors.firebase.FirestoreUpdateData;
 import db_objects.Picture;
 import db_objects.UserRole;
 import exceptions.ObjectWasRemoved;
-import representation_instruments.window_messages.detailed_view_window.DetailedPictureWindowMessage;
+import instruments.window_messages.detailed_view_window.DetailedPictureWindowMessage;
 import windows.Window;
 import windows.remove.RemovePictureWindow;
 import windows.show_windows.ShowCommentsWindow;
