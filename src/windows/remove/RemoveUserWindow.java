@@ -59,26 +59,37 @@ public class RemoveUserWindow implements Window {
                 running = false;
             } else if (!new UserExistenceCheck(database).isExist(input)) {
                 messageEngine.outputNoSuchUserExists();
-            } else if (new UsersConnect(database)
-                    .receiveUserByUsername(input)
-                    .role == UserRole.ADMIN &&
-                    !input.equals(
-                            firestoreUpdater.currentUser.username
-                    )) {
+            } else if (isFoundedUserAdmin(input) &&
+                    !isFoundedUserIsCurrentUser(input)) {
                 messageEngine.outputCannotRemoveAnotherAdmin();
                 running = false;
             } else {
-                new RemoveUser(
-                        database,
-                        firestoreUpdater
-                ).removeByUsername(input);
-                messageEngine.outputForSuccess(
-                        firestoreUpdater.currentUser.username,
-                        input
-                );
+                removeUser(input);
                 running = false;
             }
         }
         firestoreUpdater.updateData();
+    }
+
+    private boolean isFoundedUserAdmin(String username) {
+        return new UsersConnect(database)
+                .receiveUserByUsername(username)
+                .role == UserRole.ADMIN;
+    }
+
+    private boolean isFoundedUserIsCurrentUser(String username) {
+        return username.equals(firestoreUpdater.currentUser.username);
+    }
+
+    private void removeUser(String username)
+            throws ExecutionException, InterruptedException {
+        new RemoveUser(
+                database,
+                firestoreUpdater
+        ).removeByUsername(username);
+        messageEngine.outputForSuccess(
+                firestoreUpdater.currentUser.username,
+                username
+        );
     }
 }

@@ -51,35 +51,22 @@ public class UpdateUserRoleWindow implements Window {
     }
 
     private void updateProcess() throws ExecutionException, InterruptedException {
+        UsersConnect usersConnector = new UsersConnect(database);
         boolean running = true;
         while (running) {
             messageEngine.outputEnterUsername();
             String input = scanner.next();
-            UsersConnect usersConnector = new UsersConnect(database);
+
             if (input.equals("return")) {
                 running = false;
-            } else if (!new UserExistenceCheck(database).isExist(input)) {
+            } else if (!isSuchUserExists(input)) {
                 messageEngine.outputNoSuchUserExists();
-            } else if (usersConnector
-                    .receiveUserByUsername(input)
-                    .role == UserRole.ADMIN &&
-                    !input.equals(
-                            firestoreUpdater.currentUser.username
-                    )) {
+            } else if (isFoundedUserAdmin(usersConnector, input) &&
+                    !isFoundedUserIsCurrentUser(input)) {
                 messageEngine.outputCannotUpdateAnotherAdmin();
                 running = false;
             } else {
-                messageEngine.outputCurrentRole(
-                        usersConnector
-                                .receiveUserByUsername(input)
-                                .role
-                );
-                messageEngine.outputNewRole();
-                new ChangeUserRole(
-                        database,
-                        firestoreUpdater
-                ).changeRole(input, getRoleFromString(scanner.next()));
-                messageEngine.outputForSuccess();
+                changeUserRole(usersConnector, input);
                 running = false;
             }
         }
@@ -92,5 +79,34 @@ public class UpdateUserRoleWindow implements Window {
             case "signed" -> UserRole.SIGNED;
             default -> UserRole.UNSIGNED;
         };
+    }
+
+    private boolean isSuchUserExists(String username) {
+        return new UserExistenceCheck(database).isExist(username);
+    }
+
+    private boolean isFoundedUserAdmin(UsersConnect usersConnector, String username) {
+        return usersConnector
+                .receiveUserByUsername(username)
+                .role == UserRole.ADMIN;
+    }
+
+    private boolean isFoundedUserIsCurrentUser(String username) {
+        return username.equals(firestoreUpdater.currentUser.username);
+    }
+
+    private void changeUserRole(UsersConnect usersConnector, String username)
+            throws ExecutionException, InterruptedException {
+        messageEngine.outputCurrentRole(
+                usersConnector
+                        .receiveUserByUsername(username)
+                        .role
+        );
+        messageEngine.outputNewRole();
+        new ChangeUserRole(
+                database,
+                firestoreUpdater
+        ).changeRole(username, getRoleFromString(scanner.next()));
+        messageEngine.outputForSuccess();
     }
 }
