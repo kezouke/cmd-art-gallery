@@ -3,6 +3,7 @@ package windows.detailed_view_windows;
 import com.google.cloud.firestore.Firestore;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_objects.Picture;
+import db_objects.UserRole;
 import exceptions.ObjectWasRemoved;
 import representation_instruments.work_with_text.OutputMessage;
 import windows.Window;
@@ -35,10 +36,13 @@ public class DetailedPictureWindow implements Window {
                 new OutputMessage("files/OutputForDetailedPicture");
         OutputMessage errorMessage =
                 new OutputMessage("files/OutputForError");
+        OutputMessage adminOption =
+                new OutputMessage("files/OutputForRemovePicture");
         while (running) {
             try {
-                System.out.println(picture.detailedInfo());
-                greetingsMessage.display();
+                showMenu(picture.detailedInfo(),
+                        greetingsMessage,
+                        adminOption);
 
                 String input = scanner.next();
                 switch (input) {
@@ -56,8 +60,10 @@ public class DetailedPictureWindow implements Window {
                             picture
                     ).execute();
                     case "remove" -> {
-                        removeProcess();
-                        running = false;
+                        boolean isDone = removeProcess();
+                        // if isDone => we can stop showing this window
+                        // since it is removed
+                        running = !isDone;
                     }
                     default -> errorMessage.display();
                 }
@@ -70,11 +76,29 @@ public class DetailedPictureWindow implements Window {
         }
     }
 
-    private void removeProcess(){
-        new RemovePictureWindow(database,
-                firestoreUpdater,
-                scanner,
-                picture.id)
-                .execute();
+    private void showMenu(String detailedInfo,
+                          OutputMessage greetings,
+                          OutputMessage adminOptions) throws IOException {
+        System.out.println(detailedInfo);
+        greetings.display();
+        if (firestoreUpdater.currentUser.role == UserRole.ADMIN) {
+            adminOptions.display();
+        }
+    }
+
+    private boolean removeProcess() throws IOException {
+        if (firestoreUpdater.currentUser.role == UserRole.ADMIN) {
+            new RemovePictureWindow(database,
+                    firestoreUpdater,
+                    scanner,
+                    picture.id)
+                    .execute();
+            return true;
+        } else {
+            new OutputMessage("files" +
+                    "/OutputForLowPermissionsAdmin")
+                    .display();
+            return false;
+        }
     }
 }

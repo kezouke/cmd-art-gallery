@@ -71,8 +71,11 @@ public class ShowAuthorsWindow implements Window {
                 String input = scanner.next();
                 switch (input) {
                     case "add" -> {
-                        addNewAuthor();
-                        running = false;
+                        boolean isDone = addNewAuthor();
+                        // if adding is done,
+                        // we don't need to show
+                        // this window again
+                        running = !isDone;
                     }
                     case "return" -> running = false;
                     case "next" -> outputNextAuths();
@@ -122,7 +125,7 @@ public class ShowAuthorsWindow implements Window {
         }
     }
 
-    private void addNewAuthor() throws IOException {
+    private boolean addNewAuthor() throws IOException {
         if (firestoreUpdate.currentUser.role !=
                 UserRole.UNSIGNED) {
             new AuthorAddWindow(
@@ -133,10 +136,12 @@ public class ShowAuthorsWindow implements Window {
             new OutputMessage("files/author_add/OutputForSuccess")
                     .display();
             updateAuthorsData();
+            return true;
         } else {
             new OutputMessage("files/" +
                     "OutputForLowPermissionsUnsigned")
                     .display();
+            return false;
         }
     }
 

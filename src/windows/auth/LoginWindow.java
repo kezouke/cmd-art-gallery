@@ -47,7 +47,7 @@ public class LoginWindow implements Window {
                 currentUser.role = loginEngine.obtainUserRole();
                 if (currentUser.role != UserRole.UNSIGNED) {
                     successMessage.display();
-                    running = false;
+                    return;
                 }
 
                 wrongDataMessage.display();
