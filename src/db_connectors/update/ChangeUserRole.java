@@ -7,11 +7,8 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
 import db_connectors.firebase.FirestoreUpdateData;
-import db_objects.Author;
 import db_objects.UserRole;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class ChangeUserRole {

@@ -4,10 +4,8 @@ import com.google.cloud.firestore.Firestore;
 import db_connectors.auth.UserExistenceCheck;
 import db_connectors.connect.UsersConnect;
 import db_connectors.firebase.FirestoreUpdateData;
-import db_connectors.remove.RemovePicture;
 import db_connectors.remove.RemoveUser;
 import db_objects.UserRole;
-import instruments.window_messages.remove_windows.RemovePictureWindowMessage;
 import instruments.window_messages.remove_windows.RemoveUserWindowMessage;
 import windows.Window;
 

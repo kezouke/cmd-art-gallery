@@ -1,12 +1,10 @@
 package db_connectors.connect;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QuerySnapshot;
-import db_objects.Picture;
 import db_objects.User;
 import db_objects.UserRole;
 
@@ -58,10 +56,6 @@ public class UsersConnect {
 
     public User receiveUserByUsername(String username) {
         return users.get(username);
-    }
-
-    public void refreshData(Firestore database) {
-        lazyLoad(database);
     }
 
 }
