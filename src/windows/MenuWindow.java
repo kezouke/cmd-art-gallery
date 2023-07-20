@@ -51,7 +51,7 @@ public class MenuWindow implements Window {
                             firestoreUpdater,
                             database
                     ).execute();
-                    case "logout" -> {
+                    case "change" -> {
                         logout();
                         running = false;
                     }
@@ -66,6 +66,9 @@ public class MenuWindow implements Window {
 
     private void logout() throws IOException {
         new OutputMessage("files/OutputForLogout").display();
-        new AuthWindow(scanner, database).execute();
+        new InitialWindow(
+                database,
+                scanner
+        ).execute();
     }
 }

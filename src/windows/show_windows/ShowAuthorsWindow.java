@@ -3,6 +3,7 @@ package windows.show_windows;
 import com.google.cloud.firestore.Firestore;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_objects.Author;
+import db_objects.UserRole;
 import representation_instruments.work_with_firebase.ArtObjectIterator;
 import representation_instruments.work_with_text.OutputMessage;
 import windows.add_windows.AuthorAddWindow;
@@ -56,19 +57,25 @@ public class ShowAuthorsWindow implements Window {
                 new OutputMessage("files/OutputForNextAuths");
         OutputMessage prevAuths =
                 new OutputMessage("files/OutputForPrevAuths");
-
+        OutputMessage signedInOptions =
+                new OutputMessage("files/" +
+                        "OutputForSignedInUsersToAddAuthor");
         authors = authors.next();
         while (running) {
             try {
                 outputMenu(isWantToAddAuthorMessage,
+                        signedInOptions,
                         nextAuths,
                         prevAuths);
 
                 String input = scanner.next();
                 switch (input) {
                     case "add" -> {
-                        addNewAuthor();
-                        running = false;
+                        boolean isDone = addNewAuthor();
+                        // if adding is done,
+                        // we don't need to show
+                        // this window again
+                        running = !isDone;
                     }
                     case "return" -> running = false;
                     case "next" -> outputNextAuths();
@@ -82,6 +89,7 @@ public class ShowAuthorsWindow implements Window {
     }
 
     private void outputMenu(OutputMessage addAuthsMessage,
+                            OutputMessage signedInOptions,
                             OutputMessage nextAuths,
                             OutputMessage prevAuths) throws IOException {
         if (authors.hasNext()) {
@@ -91,6 +99,10 @@ public class ShowAuthorsWindow implements Window {
             prevAuths.display();
         }
         addAuthsMessage.display();
+        if (firestoreUpdate.currentUser.role
+                != UserRole.UNSIGNED) {
+            signedInOptions.display();
+        }
     }
 
     private void outputNextAuths() throws IOException {
@@ -113,15 +125,24 @@ public class ShowAuthorsWindow implements Window {
         }
     }
 
-    private void addNewAuthor() throws IOException {
-        new AuthorAddWindow(
-                scanner,
-                database,
-                firestoreUpdate
-        ).execute();
-        new OutputMessage("files/author_add/OutputForSuccess")
-                .display();
-        updateAuthorsData();
+    private boolean addNewAuthor() throws IOException {
+        if (firestoreUpdate.currentUser.role !=
+                UserRole.UNSIGNED) {
+            new AuthorAddWindow(
+                    scanner,
+                    database,
+                    firestoreUpdate
+            ).execute();
+            new OutputMessage("files/author_add/OutputForSuccess")
+                    .display();
+            updateAuthorsData();
+            return true;
+        } else {
+            new OutputMessage("files/" +
+                    "OutputForLowPermissionsUnsigned")
+                    .display();
+            return false;
+        }
     }
 
     private void updateAuthorsData() {

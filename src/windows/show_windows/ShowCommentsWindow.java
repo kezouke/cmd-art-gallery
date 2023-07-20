@@ -4,6 +4,7 @@ import com.google.cloud.firestore.Firestore;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_objects.Comment;
 import db_objects.Picture;
+import db_objects.UserRole;
 import representation_instruments.work_with_firebase.ArtObjectIterator;
 import representation_instruments.work_with_text.OutputMessage;
 import windows.add_windows.AddCommentWindow;
@@ -50,13 +51,15 @@ public class ShowCommentsWindow implements Window {
                 new OutputMessage("files/OutputForPrevComments");
         OutputMessage emptyComments =
                 new OutputMessage("files/OutputForNoComments");
-
+        OutputMessage signedInOptions =
+                new OutputMessage("files/OutputForAddingComment");
         if (comments.hasNext()) {
             comments = comments.next();
         }
         while (running) {
             try {
                 outputMenu(commentsMessage,
+                        signedInOptions,
                         nextComments,
                         prevComments,
                         emptyComments);
@@ -76,18 +79,25 @@ public class ShowCommentsWindow implements Window {
         }
     }
 
-    private void addNewComment() {
-        new AddCommentWindow(
-                scanner,
-                database,
-                firestoreUpdate,
-                picture
-        ).execute();
-        updateCommentsData();
-        comments.showArtObjects();
+    private void addNewComment() throws IOException {
+        if (firestoreUpdate.currentUser.role != UserRole.UNSIGNED) {
+            new AddCommentWindow(
+                    scanner,
+                    database,
+                    firestoreUpdate,
+                    picture
+            ).execute();
+            updateCommentsData();
+            comments.showArtObjects();
+        } else {
+            new OutputMessage("files/" +
+                    "OutputForLowPermissionsUnsigned")
+                    .display();
+        }
     }
 
     private void outputMenu(OutputMessage commentsMessage,
+                            OutputMessage signedInOptions,
                             OutputMessage nextComments,
                             OutputMessage prevComments,
                             OutputMessage emptyComments) throws IOException {
@@ -103,6 +113,10 @@ public class ShowCommentsWindow implements Window {
         }
 
         commentsMessage.display();
+        if (firestoreUpdate.currentUser.role
+                != UserRole.UNSIGNED) {
+            signedInOptions.display();
+        }
     }
 
     private void outputPrevComments() throws IOException {
