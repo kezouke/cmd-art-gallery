@@ -62,9 +62,7 @@ public class DetailedPictureWindow implements Window {
                         // since it is removed
                         running = !isDone;
                     }
-                    case "open" -> {
-                        new ShowPictureByLink(picture).execute();
-                    }
+                    case "open" -> new ShowPictureByLink(picture).execute();
                     default -> messageEngine
                             .outputWrongCommandEnteredMessage();
                 }
