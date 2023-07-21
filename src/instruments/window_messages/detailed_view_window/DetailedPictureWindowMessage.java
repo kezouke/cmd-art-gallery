@@ -23,6 +23,8 @@ public class DetailedPictureWindowMessage {
                     enter 'author'
                 If you want to see picture's commentaries
                     enter 'comments'
+                If you want to open picture:
+                    enter 'open'
                 If you want to return back:
                     enter 'back'.
                 """;

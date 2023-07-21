@@ -2,6 +2,8 @@ package db_objects;
 
 import com.google.cloud.Timestamp;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +67,10 @@ public class Picture implements iShortInfo, iMatchWhileSearch {
                 link.contains(keyword) ||
                 String.valueOf(id).equalsIgnoreCase(keyword) ||
                 author.isMatch(keyword);
+    }
+
+    public URL receiveURL() throws MalformedURLException {
+        return new URL(link);
     }
 }
 
