@@ -5,6 +5,7 @@ import db_connectors.firebase.FirestoreUpdateData;
 import db_objects.UserRole;
 import exceptions.UserRemovedHisSelf;
 import instruments.window_messages.MenuWindowMessage;
+import windows.detailed_view_windows.UserProfileWindow;
 import windows.search_windows.ChooseSearchObjectWindow;
 import windows.show_windows.ShowAuthorsWindow;
 import windows.show_windows.ShowPicturesWindow;
@@ -57,6 +58,12 @@ public class MenuWindow implements Window {
                         logout();
                         running = false;
                     }
+                    case "profile" -> new UserProfileWindow(
+                            firestoreUpdater.currentUser,
+                            scanner,
+                            firestoreUpdater,
+                            database
+                    ).execute();
                     case "users" -> showUsers();
                     case "close" -> running = false;
                     default -> menuMessages

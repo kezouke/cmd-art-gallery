@@ -17,9 +17,8 @@ public class AuthWindowMessage {
                                 
                 ____________________________________________________________________
                 If you don't want to continue, enter 'close' to stop program.
-                                
                 """;
-        System.out.println(greetMessage);
+        System.out.print(greetMessage);
     }
 
     public void outputNoteForUnsignedUsers() {
@@ -28,7 +27,7 @@ public class AuthWindowMessage {
                 however you will not be able to
                 add new pictures and authors.
                 """;
-        System.out.println(message);
+        System.out.print(message);
     }
 
     public void outputWrongCommandEntered() {

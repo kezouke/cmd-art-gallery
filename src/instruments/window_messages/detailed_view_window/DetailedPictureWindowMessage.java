@@ -38,4 +38,11 @@ public class DetailedPictureWindowMessage {
     public void outputLowPermissions() {
         new LowPermissionNotAdminMessage().outputMessage();
     }
+
+    public void outputWrongURL() {
+        String message = """
+                Unfortunately, url of this picture is wrong :(
+                """;
+        System.out.print(message);
+    }
 }

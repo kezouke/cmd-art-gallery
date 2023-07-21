@@ -4,6 +4,7 @@ import com.google.cloud.firestore.Firestore;
 import db_connectors.connect.AuthorsConnect;
 import db_connectors.connect.CommentsConnect;
 import db_connectors.connect.PicturesConnect;
+import db_connectors.connect.UsersConnect;
 import db_objects.User;
 
 public class FirestoreUpdateData {
@@ -11,7 +12,7 @@ public class FirestoreUpdateData {
     public PicturesConnect picturesConnect;
     public AuthorsConnect authorsConnect;
     public CommentsConnect commentsConnect;
-    public final User currentUser;
+    public User currentUser;
 
     public FirestoreUpdateData(Firestore database, User currentUser) {
         this.database = database;
@@ -27,5 +28,8 @@ public class FirestoreUpdateData {
         authorsConnect.refreshData(database);
         picturesConnect.refreshData(database);
         commentsConnect.refreshData(database);
+        currentUser = new UsersConnect(
+                database
+        ).receiveUserByUsername(currentUser.username);
     }
 }

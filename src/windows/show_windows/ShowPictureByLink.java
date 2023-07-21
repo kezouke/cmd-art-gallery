@@ -17,14 +17,16 @@ import java.net.URL;
 import java.util.concurrent.CountDownLatch;
 
 public class ShowPictureByLink implements Window {
-    private final Picture picture;
     private final CountDownLatch latch;
+    private final URL link;
     private final ShowPictureByLinkMessage messageEngine;
+    private final boolean isProfileLink;
 
-    public ShowPictureByLink(Picture picture) {
-        this.picture = picture;
+    public ShowPictureByLink(URL link, boolean isProfileLink) {
+        this.link = link;
         this.messageEngine = new ShowPictureByLinkMessage();
         this.latch = new CountDownLatch(1);
+        this.isProfileLink = isProfileLink;
     }
 
     private void displayImage(BufferedImage image) {
@@ -55,14 +57,15 @@ public class ShowPictureByLink implements Window {
     @Override
     public void execute() {
         try {
-            URL url = picture.receiveURL();
-            BufferedImage image = ImageIO.read(url);
+            BufferedImage image = ImageIO.read(link);
 
             if (image != null) {
                 displayImage(image);
                 latch.await();
             } else {
-                messageEngine.outputFailedToLoad();
+                if (!isProfileLink) {
+                    messageEngine.outputFailedToLoad();
+                }
             }
         } catch (IOException e) {
             messageEngine.outputError(e.getMessage());

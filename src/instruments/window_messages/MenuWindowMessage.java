@@ -25,7 +25,10 @@ public class MenuWindowMessage {
                 4) If you want to change your current account:
                     enter 'change'
                 _____________________________________________________
-                5) If you want to close application:
+                5) If you want to open your profile:
+                    enter 'profile'
+                _____________________________________________________
+                6) If you want to close application:
                     enter 'close'
                 _____________________________________________________
                 """;
@@ -41,11 +44,11 @@ public class MenuWindowMessage {
             String adminOptions = """
                     + as admin you can do following:
                     _____________________________________________________
-                    6) if you want to take a look at all users:
+                    7) if you want to take a look at all users:
                         enter 'users'
                     _____________________________________________________
                     """;
-            System.out.println(adminOptions);
+            System.out.print(adminOptions);
         }
     }
 

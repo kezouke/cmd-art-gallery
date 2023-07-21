@@ -39,6 +39,18 @@ public class UsersConnect {
                         case "signed" -> user.role = UserRole.SIGNED;
                         default -> user.role = UserRole.UNSIGNED;
                     }
+                    if (document.contains("bio")) {
+                        user.bio = document.getString("bio");
+                    } else {
+                        user.bio = "No bio yet";
+                    }
+
+                    if (document.contains("link")) {
+                        user.linkOnProfilePicture =
+                                document.getString("link");
+                    } else {
+                        user.linkOnProfilePicture = "No photo yet";
+                    }
                     users.put(
                             username,
                             user
