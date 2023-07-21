@@ -29,6 +29,13 @@ public class UserLogin {
                 if (document.contains("uid")) {
                     if (user.generateHash().equals(document.getString("uid"))) {
                         role = document.getString("role");
+                        if (document.contains("bio")) {
+                            user.bio = document.getString("bio");
+                        }
+                        if (document.contains("link")) {
+                            user.linkOnProfilePicture =
+                                    document.getString("link");
+                        }
                     }
                 }
             }

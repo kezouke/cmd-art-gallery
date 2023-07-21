@@ -11,6 +11,7 @@ import windows.remove.RemovePictureWindow;
 import windows.show_windows.ShowCommentsWindow;
 import windows.show_windows.ShowPictureByLink;
 
+import java.net.MalformedURLException;
 import java.util.Scanner;
 
 public class DetailedPictureWindow implements Window {
@@ -62,12 +63,17 @@ public class DetailedPictureWindow implements Window {
                         // since it is removed
                         running = !isDone;
                     }
-                    case "open" -> new ShowPictureByLink(picture).execute();
+                    case "open" -> new ShowPictureByLink(
+                            picture.receiveURL(),
+                            false
+                    ).execute();
                     default -> messageEngine
                             .outputWrongCommandEnteredMessage();
                 }
             } catch (ObjectWasRemoved e) {
                 running = false;
+            } catch (MalformedURLException e) {
+                messageEngine.outputWrongURL();
             }
 
         }
