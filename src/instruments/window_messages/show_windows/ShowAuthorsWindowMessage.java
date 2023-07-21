@@ -31,6 +31,9 @@ public class ShowAuthorsWindowMessage {
             System.out.println(addAuthorsMessage);
         }
         String returnOptionMessage = """
+                If you want to see detailed info about author:
+                    enter 'author#'
+                    where # - unique if of the author you want to see
                 If you want to return to previous page:
                     enter 'return'
                 """;
