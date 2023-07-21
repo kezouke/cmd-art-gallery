@@ -8,6 +8,7 @@ import instruments.window_messages.show_windows.ShowAuthorsWindowMessage;
 import instruments.work_with_firebase.ArtObjectIterator;
 import windows.add_windows.AuthorAddWindow;
 import windows.Window;
+import windows.detailed_view_windows.DetailedAuthorWindow;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,18 +63,19 @@ public class ShowAuthorsWindow implements Window {
                 );
 
                 String input = scanner.next();
-                switch (input) {
-                    case "add" -> {
-                        boolean isDone = addNewAuthor();
-                        // if adding is done,
-                        // we don't need to show
-                        // this window again
-                        running = !isDone;
-                    }
-                    case "return" -> running = false;
-                    case "next" -> outputNextAuths();
-                    case "back" -> outputPrevAuthors();
-                    default -> messageEngine.outputWrongCommandEntered();
+                if (input.equals("add")) {
+                    boolean isDone = addNewAuthor();
+                    running = !isDone;
+                } else if (input.equals("return")) {
+                    running = false;
+                } else if (input.equals("next")) {
+                    outputNextAuths();
+                } else if (input.equals("back")) {
+                    outputPrevAuthors();
+                } else if (isValidInputForDetailedInfo(input)) {
+                    showDetailedInfo(input);
+                } else {
+                    messageEngine.outputWrongCommandEntered();
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -125,12 +127,52 @@ public class ShowAuthorsWindow implements Window {
         );
     }
 
+    private void updateAuthorsDataFromStart() {
+        firestoreUpdate.updateData();
+        this.authors = new ArtObjectIterator<>(
+                initializeSortedAuthors(),
+                0,
+                step
+        );
+    }
+
     private List<Author> initializeSortedAuthors() {
         List<Author> sortedAuthors = new ArrayList<>(
                 firestoreUpdate.authorsConnect.receiveAuthorsList()
         );
         sortedAuthors.sort(Comparator.comparingInt(author -> author.id));
         return sortedAuthors;
+    }
+
+    private boolean isValidInputForDetailedInfo(String input) {
+        if (!input.startsWith("author")) {
+            return false;
+        }
+        String numberPart = input.substring(6);
+        try {
+            Integer.parseInt(numberPart);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private void showDetailedInfo(String input) {
+        Author author =
+                firestoreUpdate
+                        .authorsConnect
+                        .receiveAuthor(
+                                Integer.parseInt(input
+                                        .substring(6))
+                        );
+        new DetailedAuthorWindow(
+                author,
+                scanner,
+                database,
+                firestoreUpdate
+        ).execute();
+        updateAuthorsDataFromStart();
+        authors = authors.next();
     }
 
 }
