@@ -9,6 +9,7 @@ import instruments.window_messages.detailed_view_window.DetailedPictureWindowMes
 import windows.Window;
 import windows.remove.RemovePictureWindow;
 import windows.show_windows.ShowCommentsWindow;
+import windows.show_windows.ShowPictureByLink;
 
 import java.util.Scanner;
 
@@ -60,6 +61,9 @@ public class DetailedPictureWindow implements Window {
                         // if isDone => we can stop showing this window
                         // since it is removed
                         running = !isDone;
+                    }
+                    case "open" -> {
+                        new ShowPictureByLink(picture).execute();
                     }
                     default -> messageEngine
                             .outputWrongCommandEnteredMessage();
