@@ -29,6 +29,11 @@ public class ShowCommentsWindowMessage {
                         """;
                 System.out.println(prevCommentsMessage);
             }
+            String showProfile = """
+                    If you want to open user's profile:
+                        enter his username
+                    """;
+            System.out.print(showProfile);
         }
         if (role != UserRole.UNSIGNED) {
             String signedInOption = """

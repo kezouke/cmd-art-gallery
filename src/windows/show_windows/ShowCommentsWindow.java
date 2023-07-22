@@ -1,6 +1,7 @@
 package windows.show_windows;
 
 import com.google.cloud.firestore.Firestore;
+import db_connectors.connect.UsersConnect;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_objects.Comment;
 import db_objects.Picture;
@@ -9,6 +10,7 @@ import instruments.window_messages.show_windows.ShowCommentsWindowMessage;
 import instruments.work_with_firebase.ArtObjectIterator;
 import windows.add_windows.AddCommentWindow;
 import windows.Window;
+import windows.detailed_view_windows.UserProfileWindow;
 
 import java.io.IOException;
 import java.util.Comparator;
@@ -42,6 +44,9 @@ public class ShowCommentsWindow implements Window {
 
     @Override
     public void execute() {
+        UsersConnect usersConnect = new UsersConnect(
+                database
+        );
         boolean running = true;
         if (comments.hasNext()) {
             comments = comments.next();
@@ -56,12 +61,18 @@ public class ShowCommentsWindow implements Window {
                 );
 
                 String input = scanner.next();
-                switch (input) {
-                    case "return" -> running = false;
-                    case "next" -> outputNextComments();
-                    case "back" -> outputPrevComments();
-                    case "add" -> addNewComment();
-                    default -> messageEngine
+                if (input.equals("return")) {
+                    running = false;
+                } else if (input.equals("next")) {
+                    outputNextComments();
+                } else if (input.equals("back")) {
+                    outputPrevComments();
+                } else if (input.equals("add")) {
+                    addNewComment();
+                } else if (isSuchUserExists(input, usersConnect)) {
+                    showUserProfile(input, usersConnect);
+                } else {
+                    messageEngine
                             .outputWrongCommandEntered();
                 }
             } catch (IOException e) {
@@ -122,6 +133,22 @@ public class ShowCommentsWindow implements Window {
         sortedComments.sort(Comparator
                 .comparingInt(comment -> comment.id));
         return sortedComments;
+    }
+
+    private boolean isSuchUserExists(String username,
+                                     UsersConnect usersConnect) {
+        return usersConnect.receiveUserByUsername(username) != null;
+    }
+
+    private void showUserProfile(String username,
+                                 UsersConnect usersConnect) {
+        new UserProfileWindow(
+                usersConnect.receiveUserByUsername(username),
+                scanner,
+                firestoreUpdate,
+                database
+        ).execute();
+        comments.showArtObjects();
     }
 
 }
