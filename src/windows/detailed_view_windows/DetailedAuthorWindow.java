@@ -10,10 +10,9 @@ import exceptions.ObjectWasRemoved;
 import instruments.window_messages.detailed_view_window.DetailedAuthorWindowMessage;
 import windows.Window;
 import windows.add_windows.SaveAuthorWindow;
-import windows.add_windows.SavePictureWindow;
 import windows.remove.RemoveAuthorWindow;
 import windows.remove.UnSaveAuthorWindow;
-import windows.remove.UnSavePictureWindow;
+
 
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
@@ -48,20 +47,18 @@ public class DetailedAuthorWindow implements Window {
                 );
 
                 String input = scanner.next();
-                if (input.equals("back")) {
-                    running = false;
-                } else if (input.equals("remove")) {
-                    boolean isDone = removeProcess();
-                    // is user is admin -> successful remove is done
-                    // -> isDone is true
-                    // -> we don't need to show this window
-                    running = !isDone;
-                } else if (input.equals("save")) {
-                    saveAuthor();
-                } else if (input.equals("unsave")) {
-                    unsaveAuthor();
-                } else {
-                    messageEngine.outputWrongCommandWasEntered();
+                switch (input) {
+                    case "back" -> running = false;
+                    case "remove" -> {
+                        boolean isDone = removeProcess();
+                        // is user is admin -> successful remove is done
+                        // -> isDone is true
+                        // -> we don't need to show this window
+                        running = !isDone;
+                    }
+                    case "save" -> saveAuthor();
+                    case "unsave" -> unsaveAuthor();
+                    default -> messageEngine.outputWrongCommandWasEntered();
                 }
             } catch (ExecutionException
                      | InterruptedException e) {

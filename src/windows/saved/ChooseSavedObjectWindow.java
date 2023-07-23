@@ -89,7 +89,8 @@ public class ChooseSavedObjectWindow implements Window {
                     database,
                     firestoreUpdater,
                     scanner,
-                    savedAuthors
+                    savedAuthors,
+                    false
             ).execute();
         } else {
             messageEngine

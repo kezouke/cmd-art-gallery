@@ -3,9 +3,7 @@ package windows.remove;
 import com.google.cloud.firestore.Firestore;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_connectors.remove.RemoveSavedPicture;
-import db_connectors.upload.SavedPictureUpload;
 import db_objects.Picture;
-import instruments.window_messages.add_windows.SavePictureWindowMessage;
 import instruments.window_messages.remove_windows.UnSavePictureWindowMessage;
 import windows.Window;
 
