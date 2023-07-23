@@ -5,7 +5,10 @@ import instruments.window_messages.permission_messages.LowPermissionUnsignedMess
 import instruments.window_messages.WrongCommandMessage;
 
 public class ShowAuthorsWindowMessage {
-    public void outputMenu(boolean hasNext, boolean hasPrev, UserRole role) {
+    public void outputMenu(boolean hasNext,
+                           boolean hasPrev,
+                           UserRole role,
+                           boolean showAddOption) {
         if (hasNext) {
             String showNextAuthorsMessage = """
                     if you want to see next authors
@@ -20,7 +23,8 @@ public class ShowAuthorsWindowMessage {
                     """;
             System.out.println(showPreviousAuthorsMessage);
         }
-        if (role != UserRole.UNSIGNED) {
+        if (role != UserRole.UNSIGNED
+            && showAddOption) {
             String addAuthorsMessage = """
                     ____________________________________
                     + as signed in user:

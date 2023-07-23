@@ -1,13 +1,16 @@
 package windows.detailed_view_windows;
 
 import com.google.cloud.firestore.Firestore;
+import db_connectors.connect.SavedPicturesConnect;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_objects.Picture;
 import db_objects.UserRole;
 import exceptions.ObjectWasRemoved;
 import instruments.window_messages.detailed_view_window.DetailedPictureWindowMessage;
 import windows.Window;
+import windows.add_windows.SavePictureWindow;
 import windows.remove.RemovePictureWindow;
+import windows.remove.UnSavePictureWindow;
 import windows.show_windows.ShowCommentsWindow;
 import windows.show_windows.ShowPictureByLink;
 
@@ -39,7 +42,8 @@ public class DetailedPictureWindow implements Window {
             try {
                 messageEngine.outputMenu(
                         picture.detailedInfo(),
-                        firestoreUpdater.currentUser.role
+                        firestoreUpdater.currentUser.role,
+                        isSaved()
                 );
 
                 String input = scanner.next();
@@ -67,6 +71,8 @@ public class DetailedPictureWindow implements Window {
                             picture.receiveURL(),
                             false
                     ).execute();
+                    case "save" -> savePicture();
+                    case "unsave" -> unsavePicture();
                     default -> messageEngine
                             .outputWrongCommandEnteredMessage();
                 }
@@ -88,8 +94,47 @@ public class DetailedPictureWindow implements Window {
                     .execute();
             return true;
         } else {
-            messageEngine.outputLowPermissions();
+            messageEngine.outputLowPermissionsAdmin();
             return false;
+        }
+    }
+
+    private boolean isSaved() {
+        return new SavedPicturesConnect(
+                database,
+                firestoreUpdater.picturesConnect
+        ).receiveSavedPictures(
+                firestoreUpdater.currentUser.username
+        ).contains(picture);
+    }
+
+    private void savePicture() {
+        if (firestoreUpdater.currentUser.role
+            != UserRole.UNSIGNED) {
+            new SavePictureWindow(
+                    scanner,
+                    database,
+                    firestoreUpdater,
+                    picture
+            ).execute();
+        } else {
+            messageEngine
+                    .outputLowPermissionsUnsigned();
+        }
+    }
+
+    private void unsavePicture() {
+        if (firestoreUpdater.currentUser.role
+            != UserRole.UNSIGNED) {
+            new UnSavePictureWindow(
+                    scanner,
+                    database,
+                    firestoreUpdater,
+                    picture
+            ).execute();
+        } else {
+            messageEngine
+                    .outputLowPermissionsUnsigned();
         }
     }
 }

@@ -7,7 +7,8 @@ import instruments.window_messages.WrongCommandMessage;
 public class ShowPicturesWindowMessage {
     public void outputMenu(boolean isHasNext,
                            boolean isHasPrev,
-                           UserRole role) {
+                           UserRole role,
+                           boolean showAddOption) {
         if (isHasNext) {
             String nextPicturesMessage = """
                     if you want to see next pictures
@@ -32,7 +33,8 @@ public class ShowPicturesWindowMessage {
                                 
                 """;
         System.out.println(menu);
-        if (role != UserRole.UNSIGNED) {
+        if (role != UserRole.UNSIGNED
+            && showAddOption) {
             String addPicturesOptionMessage = """
                    ____________________________________
                     + for signed in users:

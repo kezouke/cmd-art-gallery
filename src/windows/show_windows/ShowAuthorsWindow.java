@@ -23,6 +23,7 @@ public class ShowAuthorsWindow implements Window {
     private final Scanner scanner;
     private final ShowAuthorsWindowMessage messageEngine;
     private ArtObjectIterator<Author> authors;
+    private boolean showAddOption = true;
 
     public ShowAuthorsWindow(Firestore database,
                              FirestoreUpdateData firestoreUpdate,
@@ -50,6 +51,22 @@ public class ShowAuthorsWindow implements Window {
         this.messageEngine = new ShowAuthorsWindowMessage();
     }
 
+    public ShowAuthorsWindow(Firestore database,
+                             FirestoreUpdateData firestoreUpdate,
+                             Scanner scanner,
+                             List<Author> authors,
+                             boolean showAddOption) {
+        this.database = database;
+        this.firestoreUpdate = firestoreUpdate;
+        this.scanner = scanner;
+        authors.sort(Comparator.comparingInt(author -> author.id));
+        this.authors = new ArtObjectIterator<>(
+                authors,
+                step);
+        this.messageEngine = new ShowAuthorsWindowMessage();
+        this.showAddOption = showAddOption;
+    }
+
     @Override
     public void execute() {
         boolean running = true;
@@ -59,7 +76,8 @@ public class ShowAuthorsWindow implements Window {
                 messageEngine.outputMenu(
                         authors.hasNext(),
                         authors.hasPrev(),
-                        firestoreUpdate.currentUser.role
+                        firestoreUpdate.currentUser.role,
+                        showAddOption
                 );
 
                 String input = scanner.next();
@@ -103,7 +121,8 @@ public class ShowAuthorsWindow implements Window {
 
     private boolean addNewAuthor() throws IOException {
         if (firestoreUpdate.currentUser.role !=
-                UserRole.UNSIGNED) {
+            UserRole.UNSIGNED
+            && showAddOption) {
             new AuthorAddWindow(
                     scanner,
                     database,
