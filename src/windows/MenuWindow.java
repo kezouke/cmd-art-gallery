@@ -6,6 +6,7 @@ import db_objects.UserRole;
 import exceptions.UserRemovedHisSelf;
 import instruments.window_messages.MenuWindowMessage;
 import windows.detailed_view_windows.UserProfileWindow;
+import windows.saved.ChooseSavedObjectWindow;
 import windows.search_windows.ChooseSearchObjectWindow;
 import windows.show_windows.ShowAuthorsWindow;
 import windows.show_windows.ShowPicturesWindow;
@@ -64,6 +65,7 @@ public class MenuWindow implements Window {
                             firestoreUpdater,
                             database
                     ).execute();
+                    case "saved" -> showSaved();
                     case "users" -> showUsers();
                     case "close" -> running = false;
                     default -> menuMessages
@@ -98,7 +100,21 @@ public class MenuWindow implements Window {
             ).execute();
             firestoreUpdater.updateData();
         } else {
-            menuMessages.outputForLowPermissions();
+            menuMessages.outputForLowPermissionsAdmin();
+        }
+    }
+
+    private void showSaved() {
+        if (firestoreUpdater.currentUser.role
+            != UserRole.UNSIGNED) {
+            new ChooseSavedObjectWindow(
+                    scanner,
+                    firestoreUpdater,
+                    database
+            ).execute();
+            firestoreUpdater.updateData();
+        } else {
+            menuMessages.outputForLowPermissionsUnsigned();
         }
     }
 }

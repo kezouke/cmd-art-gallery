@@ -1,6 +1,7 @@
 package windows.detailed_view_windows;
 
 import com.google.cloud.firestore.Firestore;
+import db_connectors.connect.SavedAuthorsConnect;
 import db_connectors.firebase.FirestoreUpdateData;
 import db_connectors.remove.RemovePicture;
 import db_objects.Author;
@@ -8,7 +9,11 @@ import db_objects.UserRole;
 import exceptions.ObjectWasRemoved;
 import instruments.window_messages.detailed_view_window.DetailedAuthorWindowMessage;
 import windows.Window;
+import windows.add_windows.SaveAuthorWindow;
+import windows.add_windows.SavePictureWindow;
 import windows.remove.RemoveAuthorWindow;
+import windows.remove.UnSaveAuthorWindow;
+import windows.remove.UnSavePictureWindow;
 
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
@@ -38,7 +43,8 @@ public class DetailedAuthorWindow implements Window {
             try {
                 messageEngine.outputMenu(
                         author.detailedInfo(),
-                        firestoreUpdater.currentUser.role
+                        firestoreUpdater.currentUser.role,
+                        isSaved()
                 );
 
                 String input = scanner.next();
@@ -50,6 +56,10 @@ public class DetailedAuthorWindow implements Window {
                     // -> isDone is true
                     // -> we don't need to show this window
                     running = !isDone;
+                } else if (input.equals("save")) {
+                    saveAuthor();
+                } else if (input.equals("unsave")) {
+                    unsaveAuthor();
                 } else {
                     messageEngine.outputWrongCommandWasEntered();
                 }
@@ -78,10 +88,49 @@ public class DetailedAuthorWindow implements Window {
             ).removeByAuthorId(author.id);
             throw new ObjectWasRemoved();
         } else {
-            messageEngine.outputLowPermissionMessage();
+            messageEngine.outputLowPermissionAdminMessage();
             return false;
         }
 
+    }
+
+    private boolean isSaved() {
+        return new SavedAuthorsConnect(
+                database,
+                firestoreUpdater.authorsConnect
+        ).receiveSavedAuthors(
+                firestoreUpdater.currentUser.username
+        ).contains(author);
+    }
+
+    private void saveAuthor() {
+        if (firestoreUpdater.currentUser.role
+            != UserRole.UNSIGNED) {
+            new SaveAuthorWindow(
+                    scanner,
+                    database,
+                    firestoreUpdater,
+                    author
+            ).execute();
+        } else {
+            messageEngine
+                    .outputLowPermissionUnsignedMessage();
+        }
+    }
+
+    private void unsaveAuthor() {
+        if (firestoreUpdater.currentUser.role
+            != UserRole.UNSIGNED) {
+            new UnSaveAuthorWindow(
+                    scanner,
+                    database,
+                    firestoreUpdater,
+                    author
+            ).execute();
+        } else {
+            messageEngine
+                    .outputLowPermissionUnsignedMessage();
+        }
     }
 }
 

@@ -23,6 +23,7 @@ public class ShowPicturesWindow implements Window {
     private final Scanner scanner;
     private final Firestore database;
     private final ShowPicturesWindowMessage messageEngine;
+    private boolean showAddOption = true;
 
     public ShowPicturesWindow(FirestoreUpdateData firestoreUpdate,
                               Scanner scanner,
@@ -35,6 +36,23 @@ public class ShowPicturesWindow implements Window {
                 step
         );
         this.messageEngine = new ShowPicturesWindowMessage();
+    }
+
+    public ShowPicturesWindow(FirestoreUpdateData firestoreUpdate,
+                              Scanner scanner,
+                              Firestore database,
+                              List<Picture> pictures,
+                              boolean showAddOption) {
+        this.firestoreUpdate = firestoreUpdate;
+        this.scanner = scanner;
+        this.database = database;
+        pictures.sort(Comparator.comparingInt(picture -> picture.id));
+        this.pictures = new ArtObjectIterator<>(
+                pictures,
+                step
+        );
+        this.messageEngine = new ShowPicturesWindowMessage();
+        this.showAddOption = showAddOption;
     }
 
     public ShowPicturesWindow(FirestoreUpdateData firestoreUpdate,
@@ -61,7 +79,8 @@ public class ShowPicturesWindow implements Window {
                 messageEngine.outputMenu(
                         pictures.hasNext(),
                         pictures.hasPrev(),
-                        firestoreUpdate.currentUser.role
+                        firestoreUpdate.currentUser.role,
+                        showAddOption
                 );
 
                 String input = scanner.next();
@@ -86,7 +105,8 @@ public class ShowPicturesWindow implements Window {
     }
 
     private void addNewPicture() throws IOException {
-        if (firestoreUpdate.currentUser.role != UserRole.UNSIGNED) {
+        if (firestoreUpdate.currentUser.role != UserRole.UNSIGNED
+            && showAddOption) {
             new PictureAddWindow(
                     scanner,
                     database,

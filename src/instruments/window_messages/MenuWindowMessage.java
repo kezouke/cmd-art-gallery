@@ -2,6 +2,7 @@ package instruments.window_messages;
 
 import db_objects.UserRole;
 import instruments.window_messages.permission_messages.LowPermissionNotAdminMessage;
+import instruments.window_messages.permission_messages.LowPermissionUnsignedMessage;
 
 public class MenuWindowMessage {
     private final String greetingMessage;
@@ -40,15 +41,26 @@ public class MenuWindowMessage {
 
     public void outputGreeting(UserRole role) {
         System.out.print(greetingMessage);
-        if(role == UserRole.ADMIN) {
-            String adminOptions = """
-                    + as admin you can do following:
+        if (role != UserRole.UNSIGNED) {
+            String signedInOption = """
+                    + as signed you can do following:
                     _____________________________________________________
-                    7) if you want to take a look at all users:
-                        enter 'users'
+                    7) If you want to open saved list:
+                        enter 'saved'
                     _____________________________________________________
                     """;
-            System.out.print(adminOptions);
+            System.out.println(signedInOption);
+            if (role == UserRole.ADMIN) {
+                String adminOptions = """
+                        + as admin you can do following:
+                        _____________________________________________________
+                        8) if you want to take a look at all users:
+                            enter 'users'
+                        _____________________________________________________
+                        """;
+                System.out.print(adminOptions);
+            }
+
         }
     }
 
@@ -56,11 +68,16 @@ public class MenuWindowMessage {
         wrongCommandMessage.outputMessage();
     }
 
-    public void outputSuccessLogout(){
+    public void outputSuccessLogout() {
         System.out.println(logoutSuccessMessage);
     }
 
-    public void outputForLowPermissions() {
+    public void outputForLowPermissionsAdmin() {
         new LowPermissionNotAdminMessage().outputMessage();
+    }
+
+    public void outputForLowPermissionsUnsigned() {
+        new LowPermissionUnsignedMessage()
+                .outputMessage();
     }
 }
